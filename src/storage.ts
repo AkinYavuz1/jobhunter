@@ -28,7 +28,7 @@ export async function saveJob(job: ScoredJob): Promise<void> {
     description_full: job.descriptionFull,
     url: job.url,
     url_canonical: job.urlCanonical,
-    posted_at: job.postedAt?.toISOString() ?? null,
+    posted_at: job.postedAt && !isNaN(job.postedAt.getTime()) ? job.postedAt.toISOString() : null,
     obtainability: job.obtainability,
     obtainability_reason: job.obtainabilityReason,
     raw: job.raw,

@@ -57,7 +57,7 @@ export async function searchReed(term: string): Promise<RawJob[]> {
         descriptionFull: false,
         url: `https://www.reed.co.uk/jobs/${r.jobId}`,
         urlCanonical: canonicalUrl(`https://www.reed.co.uk/jobs/${r.jobId}`),
-        postedAt: r.date ? new Date(r.date) : null,
+        postedAt: (() => { const d = r.date ? new Date(r.date) : null; return d && !isNaN(d.getTime()) ? d : null; })(),
         raw: r,
       });
     }
