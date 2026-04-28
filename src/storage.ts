@@ -3,17 +3,17 @@ import { env } from './env.js';
 import type { RawJob, ScoredJob, GeneratedDocs } from './types.js';
 
 const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
-const db = supabase.schema('jobhuntremote');
+const db = supabase; // tables live in public schema as jh_*
 
 // ── Jobs ──────────────────────────────────────────────────────────────────────
 
 export async function getJob(id: string): Promise<RawJob | null> {
-  const { data } = await db.from('jobs').select('*').eq('id', id).maybeSingle();
+  const { data } = await db.from('jh_jobs').select('*').eq('id', id).maybeSingle();
   return data ? dbRowToJob(data) : null;
 }
 
 export async function saveJob(job: ScoredJob): Promise<void> {
-  await db.from('jobs').upsert({
+  await db.from('jh_jobs').upsert({
     id: job.id,
     source: job.source,
     title: job.title,
@@ -36,22 +36,22 @@ export async function saveJob(job: ScoredJob): Promise<void> {
 }
 
 export async function hasBeenNotified(id: string): Promise<boolean> {
-  const { data } = await db.from('notified').select('id').eq('id', id).maybeSingle();
+  const { data } = await db.from('jh_notified').select('id').eq('id', id).maybeSingle();
   return data !== null;
 }
 
 export async function markNotified(id: string): Promise<void> {
-  await db.from('notified').insert({ id });
+  await db.from('jh_notified').insert({ id });
 }
 
 export async function markApplied(id: string): Promise<void> {
-  await db.from('jobs').update({ applied: true, applied_at: new Date().toISOString() }).eq('id', id);
+  await db.from('jh_jobs').update({ applied: true, applied_at: new Date().toISOString() }).eq('id', id);
 }
 
 // ── Documents ─────────────────────────────────────────────────────────────────
 
 export async function saveDocument(jobId: string, docs: GeneratedDocs): Promise<void> {
-  await db.from('documents').upsert({
+  await db.from('jh_documents').upsert({
     id: jobId,
     cover_letter: docs.coverLetter,
     cv_tailored: docs.cvTailored,
@@ -91,7 +91,7 @@ export async function deleteFolder(folderPath: string): Promise<void> {
 export async function getExpiredJobIds(olderThanDays: number): Promise<string[]> {
   const cutoff = new Date(Date.now() - olderThanDays * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await db
-    .from('jobs')
+    .from('jh_jobs')
     .select('id')
     .eq('applied', false)
     .lt('scraped_at', cutoff);
@@ -99,7 +99,7 @@ export async function getExpiredJobIds(olderThanDays: number): Promise<string[]>
 }
 
 export async function deleteJob(id: string): Promise<void> {
-  await db.from('jobs').delete().eq('id', id);
+  await db.from('jh_jobs').delete().eq('id', id);
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

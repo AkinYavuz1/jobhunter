@@ -51,8 +51,7 @@ async function main() {
     const { env } = await import('./env.js');
     const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY);
     const { data: indeedRows } = await supabase
-      .schema('jobhuntremote')
-      .from('jobs')
+      .from('jh_jobs')
       .select('*')
       .eq('source', 'indeed');
     if (indeedRows?.length) {
@@ -123,12 +122,14 @@ async function main() {
         }
       }
 
-      // 6b-c. Gemini: CV tailoring + cover letter + obtainability
-      const output = await generateForJob(job, cvBaseYaml, globalConfig);
+      // 6b. Save raw job to DB first — decoupled from Gemini so jobs persist even if generation fails
+      await saveJob({ ...job, obtainability: 0, obtainabilityReason: '' });
 
+      // 6c. Gemini: CV tailoring + cover letter + obtainability
+      const output = await generateForJob(job, cvBaseYaml, globalConfig);
       const scoredJob = mergeIntoScoredJob(job, output);
 
-      // 6b. Save to DB
+      // Update with obtainability score
       await saveJob(scoredJob);
 
       // 6e. Render DOCX + PDF

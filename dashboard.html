@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Job Hunter Dashboard — 23 jobs</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #222; }
+    header { background: #1B4332; color: white; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 20px; font-weight: 600; }
+    header .meta { font-size: 13px; opacity: 0.8; }
+    .filters { background: white; padding: 14px 32px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .filters input { padding: 7px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; width: 220px; }
+    .filters select { padding: 7px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background: white; }
+    .filters label { font-size: 13px; color: #555; }
+    .count { font-size: 13px; color: #888; margin-left: auto; }
+    main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+    .job-card { background: white; border-radius: 10px; border: 1px solid #e0e0e0; padding: 22px 24px; margin-bottom: 18px; transition: box-shadow 0.15s; }
+    .job-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.08); }
+    .job-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .job-title-row h2 { font-size: 16px; font-weight: 600; }
+    .job-title-row h2 a { color: #1B4332; text-decoration: none; }
+    .job-title-row h2 a:hover { text-decoration: underline; }
+    .badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .badge.green { background: #d1fae5; color: #065f46; }
+    .badge.amber { background: #fef3c7; color: #92400e; }
+    .badge.grey { background: #f3f4f6; color: #6b7280; }
+    .job-meta { font-size: 13px; color: #666; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    .sep { color: #bbb; }
+    .company { font-weight: 500; color: #444; }
+    .salary { color: #1B4332; font-weight: 600; }
+    .reason { margin: 10px 0; font-size: 13px; color: #555; background: #f0f7f4; border-left: 3px solid #1B4332; padding: 8px 12px; border-radius: 0 4px 4px 0; font-style: italic; }
+    .doc-links { margin: 12px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-doc { display: inline-block; padding: 6px 14px; background: #f0f7f4; border: 1px solid #a7d7c5; color: #1B4332; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500; }
+    .btn-doc:hover { background: #d1fae5; }
+    .no-docs { font-size: 13px; color: #999; margin: 10px 0; font-style: italic; }
+    .cover-letter { margin: 12px 0; padding: 14px 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 6px; font-size: 13px; line-height: 1.6; color: #444; }
+    .job-actions { margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+    .btn-apply { display: inline-block; background: #1B4332; color: white; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
+    .btn-apply:hover { background: #155127; }
+    .applied-badge { font-size: 13px; color: #059669; font-weight: 600; }
+    .hidden { display: none !important; }
+    .no-results { text-align: center; color: #999; padding: 48px; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💼 Job Hunter Dashboard</h1>
+    <div class="meta">Generated 28/04/2026, 20:58:05 · 23 jobs · sorted by obtainability</div>
+  </header>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search title, company..." oninput="filterJobs()"/>
+    <label>Min score: <select id="minScore" onchange="filterJobs()">
+      <option value="0">Any</option>
+      <option value="50">50+</option>
+      <option value="60">60+</option>
+      <option value="75">75+</option>
+      <option value="85">85+</option>
+    </select></label>
+    <label><input type="checkbox" id="docsOnly" onchange="filterJobs()"/> CVs ready only</label>
+    <span class="count" id="countLabel">23 jobs</span>
+  </div>
+  <main id="jobList">
+    
+    <div class="job-card" id="adzuna:5709979887">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge green">90/100</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709979887?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=46B4E58F5135D752B07DECCA59146595671B38E5" target="_blank">Business Intelligence Developer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Ultima</span>
+          <span class="sep">·</span>
+          <span class="salary">£68k – £68k</span>
+          <span class="sep">·</span>
+          <span class="location">Eastern England, UK</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 25 Apr 2026</span>
+        </div>
+      </div>
+      <div class="reason">Akin's CV shows strong overlap with the job description, with experience in Power BI, SQL, and Azure, and correct seniority as a Principal Insight Developer.</div>
+      <div class="doc-links">
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.uE3r37TP_6jG5Iy2ZY71rJnSniSIQy0uStoMlcgjq1k" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.DF2b7I9U6nDg1CLojXr0lCWxZ6w8fygMB4bY8XKi-fA" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.tM_3I1cYgwFoPaZSRzsjXNoKCssGozZxO2QLIgn8_24" target="_blank" class="btn-doc">✉️ Cover letter</a>
+      </div>
+      <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>As a seasoned BI Developer with a passion for turning data into meaningful insights, I am excited about the opportunity to join Trustmarque and drive business decisions. With a track record of delivering 20+ Power BI dashboards and building KPIs tracking healthcare outcomes, I am confident in my ability to shape how data is transformed and consumed across the organisation. I look forward to discussing how my skills can support Trustmarque's data team.</div>
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709979887?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=46B4E58F5135D752B07DECCA59146595671B38E5" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5709492976">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge green">90/100</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709492976?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=588E44F50FBBBE4B389E3B617D477FA15C99E42E" target="_blank">Power BI Developer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Hays Technology</span>
+          <span class="sep">·</span>
+          <span class="salary">£50k – £60k</span>
+          <span class="sep">·</span>
+          <span class="location">Stanley, Liverpool</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 24 Apr 2026</span>
+        </div>
+      </div>
+      <div class="reason">Akin's CV shows strong overlap with the job description, particularly in Power BI, SQL, and Azure, with correct seniority and direct employer experience.</div>
+      <div class="doc-links">
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.ILDJ-7FwOn1fXP4PBaf2YXUWlS1CWGo4qwwRqTi48r4" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.14fzc14dWRNrcBk7k6xk6eGD6DE-gpCdaCyXIxho1N0" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.qs3I3dDcYYBChp1JvqeMyB_MED6qnWpQPC8qBUNxj04" target="_blank" class="btn-doc">✉️ Cover letter</a>
+      </div>
+      <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>As a seasoned Power BI Specialist, I drive business decisions with data-driven insights. I architected 20+ Power BI dashboards across 5+ NHS trusts, driving decisions on patient flow and service efficiency. I am excited to bring my expertise to Hays Technology and help the business make informed decisions with automated reports and dashboards.</div>
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709492976?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=588E44F50FBBBE4B389E3B617D477FA15C99E42E" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56752753">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge green">85/100</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56752753" target="_blank">Senior Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Robert Walters</span>
+          <span class="sep">·</span>
+          <span class="salary">£65k – £75k</span>
+          <span class="sep">·</span>
+          <span class="location">Cheshire</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Jul 2026</span>
+        </div>
+      </div>
+      <div class="reason">Akin's CV shows strong overlap with the job description, particularly in Power BI, SQL, and Azure, and he has the correct seniority level as a Principal Insight Developer.</div>
+      <div class="doc-links">
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YuZG9jeCIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.DNLteCu9YGkQ7ueULg2Jl_aRec5nPNXkgPOG9L_sH78" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YucGRmIiwiaWF0IjoxNzc3NDA2Mjg0LCJleHAiOjE3NzgwMTEwODR9.hH5KE7YSKcAbi5jnqBYvTI_SLwot0Y4enLfmmJRjJTk" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY292ZXJfbGV0dGVyLnR4dCIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.6zwW6k0Klbj3HhSO9EeaOGA6QY5fgV05uHkERlyQRGY" target="_blank" class="btn-doc">✉️ Cover letter</a>
+      </div>
+      <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>With a proven track record of designing and developing modern data platforms, I am confident in my ability to support analytics, reporting, and AI-driven initiatives through reliable, secure, and scalable data infrastructure. I have architected 20+ Power BI dashboards and led data mapping and transformation activities across multiple NHS datasets. I look forward to discussing how my skills can drive business growth in this Senior Data Engineer role.</div>
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56752753" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56756713">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56756713" target="_blank">Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Erin Associates</span>
+          <span class="sep">·</span>
+          <span class="salary">£55k – £60k</span>
+          <span class="sep">·</span>
+          <span class="location">West Yorkshire</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56756713" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56589647">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56589647" target="_blank">Business Development & Marketing Coordinator</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Larbey Evans</span>
+          <span class="sep">·</span>
+          <span class="salary">£40k – £50k</span>
+          <span class="sep">·</span>
+          <span class="location">EC2N4AG</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 3 Jun 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56589647" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56733243">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56733243" target="_blank">Proclaim Developer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Express Solicitors</span>
+          <span class="sep">·</span>
+          <span class="salary">£40k – £50k</span>
+          <span class="sep">·</span>
+          <span class="location">M224SN</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Jan 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56733243" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56760229">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56760229" target="_blank">Analytics Engineer (12 month FTC)</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£57k – £67k</span>
+          <span class="sep">·</span>
+          <span class="location">Newcastle Upon Tyne</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56760229" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56735973">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56735973" target="_blank">Machine Learning Engineer - £110k – £130k – Geospatial Tech 4 Good</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Opus Recruitment Solutions Ltd</span>
+          <span class="sep">·</span>
+          <span class="salary">£110k – £130k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Feb 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56735973" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5712890082">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank">Business Analyst - Compliance & Data</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Randstad Technologies</span>
+          <span class="sep">·</span>
+          <span class="salary">£60k – £65k</span>
+          <span class="sep">·</span>
+          <span class="location">London, UK</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 28 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5712841148">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank">Business Analyst - Compliance & Data</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Randstad Technologies Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£60k – £65k</span>
+          <span class="sep">·</span>
+          <span class="location">The City, Central London</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 28 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5712865982">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/details/5712865982?utm_medium=api&utm_source=047c4a0b" target="_blank">Senior Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£90k – £100k</span>
+          <span class="sep">·</span>
+          <span class="location">Edinburgh Technopole, Milton Bridge</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 28 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/details/5712865982?utm_medium=api&utm_source=047c4a0b" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5712046237">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank">Senior Data Engineer (AWS, Airflow, DBT)</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£80k – £100k</span>
+          <span class="sep">·</span>
+          <span class="location">Leeds, West Yorkshire</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 28 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5709980030">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank">Principal Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Digital Skills ltd</span>
+          <span class="sep">·</span>
+          <span class="salary">£95k – £95k</span>
+          <span class="sep">·</span>
+          <span class="location">UK</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 25 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5709358830">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank">Data Engineer (Snowflake/ AWS) - REMOTE</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Hays Specialist Recruitment Limited</span>
+          <span class="sep">·</span>
+          <span class="salary">£124k – £169k</span>
+          <span class="sep">·</span>
+          <span class="location">London, UK</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 24 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5709299464">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/details/5709299464?utm_medium=api&utm_source=047c4a0b" target="_blank">Data Engineer (Snowflake/ AWS) - REMOTE</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Hays Specialist Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£124k – £169k</span>
+          <span class="sep">·</span>
+          <span class="location">St Paul's, Central London</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 24 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/details/5709299464?utm_medium=api&utm_source=047c4a0b" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="adzuna:5707204500">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank">Principal Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">VIQU IT Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£80k – £95k</span>
+          <span class="sep">·</span>
+          <span class="location">London, UK</span>
+          <span class="sep">·</span>
+          <span class="source">adzuna</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 22 Apr 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56448344">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56448344" target="_blank">Software Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Vermillion Analytics</span>
+          <span class="sep">·</span>
+          <span class="salary">£45k – £65k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 2 Sept 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56448344" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56739957">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56739957" target="_blank">Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£65k – £70k</span>
+          <span class="sep">·</span>
+          <span class="location">Sheffield</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Feb 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56739957" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56760122">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56760122" target="_blank">BI Analyst</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£50k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56760122" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56739796">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56739796" target="_blank">Data Analyst (BI/Commercial/Product)</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£50k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">Sheffield</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Feb 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56739796" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56733413">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56733413" target="_blank">Financial Analyst</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Robert Half</span>
+          <span class="sep">·</span>
+          <span class="salary">£45k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Jan 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56733413" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56768361">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56768361" target="_blank">Backend Python Engineer, AI & Data</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Partnerscale</span>
+          <span class="sep">·</span>
+          <span class="salary">£45k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">SE10AA</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Oct 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56768361" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="reed:56762811">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56762811" target="_blank">Python Developer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Initialize</span>
+          <span class="sep">·</span>
+          <span class="salary">£40k – £60k</span>
+          <span class="sep">·</span>
+          <span class="location">EC1A1BB</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Sept 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56762811" target="_blank" class="btn-apply">Apply Now →</a>
+        
+      </div>
+    </div>
+  
+    <div class="no-results hidden" id="noResults">No jobs match your filters.</div>
+  </main>
+  <script>
+    function filterJobs() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const minScore = parseInt(document.getElementById('minScore').value);
+      const docsOnly = document.getElementById('docsOnly').checked;
+      let count = 0;
+      document.querySelectorAll('.job-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const badge = card.querySelector('.badge');
+        const score = badge ? parseInt(badge.textContent) || 0 : 0;
+        const hasDocs = card.querySelector('.btn-doc') !== null;
+        const show = (!q || text.includes(q)) && score >= minScore && (!docsOnly || hasDocs);
+        card.classList.toggle('hidden', !show);
+        if (show) count++;
+      });
+      document.getElementById('countLabel').textContent = count + ' jobs';
+      document.getElementById('noResults').classList.toggle('hidden', count > 0);
+    }
+  </script>
+</body>
+</html>
