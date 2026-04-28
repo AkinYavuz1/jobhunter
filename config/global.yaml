@@ -25,5 +25,6 @@ cv:
   content_budget:
     profile_sentences: 5
     recent_role_bullets: 6    # NHS, Openwork, Good Energy
-    older_role_bullets: 3     # Holloway, 7 Layer, Car2U
-    key_projects: 2
+    older_role_bullets: 4     # Holloway, 7 Layer, Car2U
+    key_projects: 3
+    key_project_words: 70

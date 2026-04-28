@@ -84,10 +84,13 @@ app.get('/', async (_req, res) => {
       ? `<div class="reason">${job.obtainability_reason}</div>` : '';
 
     const appliedClass = job.applied ? ' card-applied' : '';
+    const regenBtn = `<button class="btn-action btn-regen" id="genbtn_${safeId}" onclick="generateCV('${job.id}','${safeId}')">↻ Regenerate CV</button>`;
     const actionButtons = job.applied
       ? `<span class="applied-badge">✓ Applied</span>`
       : `<a href="${job.url}" target="_blank" class="btn-apply">Apply Now →</a>
-         ${!doc?.folder_path ? `<button class="btn-action btn-generate" id="genbtn_${safeId}" onclick="generateCV('${job.id}','${safeId}')">⚡ Generate CV</button>` : ''}
+         ${!doc?.folder_path
+           ? `<button class="btn-action btn-generate" id="genbtn_${safeId}" onclick="generateCV('${job.id}','${safeId}')">⚡ Generate CV</button>`
+           : regenBtn}
          <button class="btn-action btn-applied" onclick="markApplied('${job.id}','${safeId}')">✓ Applied for this</button>
          <button class="btn-action btn-dismiss" onclick="dismiss('${safeId}')">✕ Not Interested</button>`;
 
@@ -246,6 +249,9 @@ function buildPage(jobRows: string, total: number): string {
     .btn-generate { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
     .btn-generate:hover:not(:disabled) { background: #dbeafe; }
     .btn-generate:disabled { opacity: 0.6; cursor: wait; }
+    .btn-regen { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; font-size: 12px; padding: 6px 12px; }
+    .btn-regen:hover:not(:disabled) { background: #e5e7eb; }
+    .btn-regen:disabled { opacity: 0.6; cursor: wait; }
     .btn-applied { background: #d1fae5; color: #065f46; }
     .btn-applied:hover { background: #a7f3d0; }
     .btn-dismiss { background: #fee2e2; color: #991b1b; }
@@ -286,7 +292,8 @@ function buildPage(jobRows: string, total: number): string {
     async function generateCV(jobId, safeId) {
       const btn = document.getElementById('genbtn_' + safeId);
       if (!btn) return;
-      btn.textContent = '⏳ Generating (~10s)...';
+      const isRegen = btn.classList.contains('btn-regen');
+      btn.textContent = isRegen ? '⏳ Regenerating (~10s)...' : '⏳ Generating (~10s)...';
       btn.disabled = true;
       try {
         const res = await fetch('/api/generate', {
@@ -321,9 +328,12 @@ function buildPage(jobRows: string, total: number): string {
           }
         }
 
-        btn.remove();
+        // Keep as regenerate button for future use
+        btn.className = 'btn-action btn-regen';
+        btn.textContent = '↻ Regenerate CV';
+        btn.disabled = false;
       } catch (e) {
-        btn.textContent = '⚡ Generate CV';
+        btn.textContent = isRegen ? '↻ Regenerate CV' : '⚡ Generate CV';
         btn.disabled = false;
         alert('Generation failed: ' + e.message);
       }

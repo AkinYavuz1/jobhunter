@@ -33,9 +33,10 @@ export async function generateForJob(
 
   const contentBudget = (globalConfig.cv as Record<string, unknown>)?.content_budget as Record<string, number> ?? {};
   const recentBullets = contentBudget.recent_role_bullets ?? 6;
-  const olderBullets = contentBudget.older_role_bullets ?? 3;
+  const olderBullets = contentBudget.older_role_bullets ?? 4;
   const profileSentences = contentBudget.profile_sentences ?? 5;
-  const keyProjectsCount = contentBudget.key_projects ?? 2;
+  const keyProjectsCount = contentBudget.key_projects ?? 3;
+  const keyProjectWords = contentBudget.key_project_words ?? 70;
 
   const systemPrompt = `You are a professional CV writer and UK recruitment specialist for data/BI roles.
 You tailor CVs to specific job descriptions and write concise cover letters.
@@ -74,12 +75,12 @@ One paragraph. Confident and direct — no "I am writing to apply". Reference 1-
 - skills: string[], reorder most relevant to THIS JD first. Add legitimate keywords from JD that match Akin's actual experience.
 - location: use "United Kingdom (Remote)"
 - certifications: string[], keep all, reorder if relevant
-- employment: array of roles. Recent roles (NHS, Openwork, Good Energy): max ${recentBullets} bullets. Older roles (Holloway, 7 Layer, Car2U): max ${olderBullets} bullets. Rephrase to mirror JD terminology where truthful. TOTAL bullets across ALL roles must be ≤30 (fits 2 A4 pages). Do NOT invent technologies or metrics.
+- employment: array of roles. Recent roles (NHS, Openwork, Good Energy): max ${recentBullets} bullets. Older roles (Holloway, 7 Layer, Car2U): max ${olderBullets} bullets. Rephrase to mirror JD terminology where truthful. TOTAL bullets across ALL roles must be ≤34 (fills 2 A4 pages). Do NOT invent technologies or metrics.
 
 ### keyProjects (array of ${keyProjectsCount} objects)
 Select the ${keyProjectsCount} most relevant of Akin's key projects from his CV base and tailor the descriptions to the job description. Each object has:
 - name: string (project name)
-- description: string (max 50 words, tailored to JD)
+- description: string (max ${keyProjectWords} words, tailored to JD — write full sentences, do not truncate early)
 
 ## REQUIRED JSON SCHEMA
 {
