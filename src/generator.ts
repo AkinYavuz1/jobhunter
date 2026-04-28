@@ -1,20 +1,9 @@
-import Groq from 'groq-sdk';
+import Anthropic from '@anthropic-ai/sdk';
 import { env } from './env.js';
 import type { RawJob, ScoredJob, TailoredCV } from './types.js';
 
-const groq = new Groq({ apiKey: env.GROQ_API_KEY });
-
-const MODEL = 'llama-3.3-70b-versatile';
-
-// Groq free tier: 30 RPM → 2s between calls is safe
-const GROQ_DELAY_MS = 2500;
-let lastCallAt = 0;
-
-async function rateLimit(): Promise<void> {
-  const wait = GROQ_DELAY_MS - (Date.now() - lastCallAt);
-  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-  lastCallAt = Date.now();
-}
+const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+const MODEL = 'claude-sonnet-4-6';
 
 export interface GeneratorOutput {
   obtainability: number;
@@ -29,8 +18,6 @@ export async function generateForJob(
   cvBaseYaml: string,
   globalConfig: Record<string, unknown>
 ): Promise<GeneratorOutput> {
-  await rateLimit();
-
   const contentBudget = (globalConfig.cv as Record<string, unknown>)?.content_budget as Record<string, number> ?? {};
   const recentBullets = contentBudget.recent_role_bullets ?? 6;
   const olderBullets = contentBudget.older_role_bullets ?? 4;
@@ -38,14 +25,7 @@ export async function generateForJob(
   const keyProjectsCount = contentBudget.key_projects ?? 3;
   const keyProjectWords = contentBudget.key_project_words ?? 70;
 
-  const systemPrompt = `You are a professional CV writer and UK recruitment specialist for data/BI roles.
-You tailor CVs to specific job descriptions and write concise cover letters.
-You always respond with valid JSON only — no markdown, no code fences, no explanation.`;
-
   const userPrompt = `Tailor Akin Yavuz's CV for the following job and return a JSON object.
-
-## CANDIDATE CV (YAML)
-${cvBaseYaml}
 
 ## JOB DETAILS
 Title: ${job.title}
@@ -111,17 +91,26 @@ Select the ${keyProjectsCount} most relevant of Akin's key projects from his CV 
 
 Return ONLY the JSON object. No markdown. No explanation.`;
 
-  const response = await groq.chat.completions.create({
+  const response = await client.messages.create({
     model: MODEL,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
+    max_tokens: 2500,
+    // System blocks: stable content cached after the first call
+    system: [
+      {
+        type: 'text',
+        text: 'You are a professional CV writer and UK recruitment specialist for data/BI roles.\nYou tailor CVs to specific job descriptions and write concise cover letters.\nYou always respond with valid JSON only — no markdown, no code fences, no explanation.',
+      },
+      {
+        type: 'text',
+        text: `## CANDIDATE CV (YAML)\n${cvBaseYaml}`,
+        cache_control: { type: 'ephemeral' }, // caches system prompt + cv-base YAML together
+      },
     ],
-    response_format: { type: 'json_object' },
-    temperature: 0.3,
+    messages: [{ role: 'user', content: userPrompt }],
   });
 
-  const text = response.choices[0]?.message?.content ?? '{}';
+  const block = response.content.find((b) => b.type === 'text');
+  const text = block?.type === 'text' ? block.text : '{}';
   const parsed = JSON.parse(text) as GeneratorOutput;
   parsed.obtainability = Math.max(0, Math.min(100, Number(parsed.obtainability) || 0));
   return parsed;
