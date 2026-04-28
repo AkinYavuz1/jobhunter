@@ -124,14 +124,7 @@ async function main() {
       }
 
       // 6b-c. Gemini: CV tailoring + cover letter + obtainability
-      let output;
-      try {
-        output = await generateForJob(job, cvBaseYaml, globalConfig);
-      } catch (err) {
-        // Retry once with simpler prompt on parse error
-        logger.warn('Gemini call failed, retrying', { id: job.id, error: (err as Error).message });
-        output = await generateForJob(job, cvBaseYaml, globalConfig);
-      }
+      const output = await generateForJob(job, cvBaseYaml, globalConfig);
 
       const scoredJob = mergeIntoScoredJob(job, output);
 

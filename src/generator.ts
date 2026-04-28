@@ -44,7 +44,18 @@ export interface GeneratorOutput {
   cv: TailoredCV;
 }
 
+// Gemini 2.5 Flash free tier: 10 RPM. One call per job = need ≥6s between calls.
+const GEMINI_DELAY_MS = 7000;
+let lastCallAt = 0;
+
+async function geminiRateLimit(): Promise<void> {
+  const wait = GEMINI_DELAY_MS - (Date.now() - lastCallAt);
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+  lastCallAt = Date.now();
+}
+
 export async function generateForJob(job: RawJob, cvBaseYaml: string, globalConfig: Record<string, unknown>): Promise<GeneratorOutput> {
+  await geminiRateLimit();
   const contentBudget = (globalConfig.cv as Record<string, unknown>)?.content_budget as Record<string, number> ?? {};
   const recentBullets = contentBudget.recent_role_bullets ?? 4;
   const olderBullets = contentBudget.older_role_bullets ?? 2;

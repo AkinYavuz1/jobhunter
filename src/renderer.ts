@@ -2,11 +2,8 @@ import {
   Document, Packer, Paragraph, TextRun,
   BorderStyle, convertInchesToTwip,
 } from 'docx';
+import { chromium } from 'playwright';
 import { PDFDocument } from 'pdf-lib';
-import { execSync } from 'child_process';
-import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { tmpdir } from 'os';
-import { join } from 'path';
 import type { TailoredCV } from './types.js';
 
 const FONT = 'Calibri';
@@ -24,56 +21,97 @@ export async function renderCV(cv: TailoredCV, name: string): Promise<RenderedCV
   const doc = buildDocument(cv, name);
   const docxBuffer = await Packer.toBuffer(doc);
 
-  // Convert to PDF via docx2pdf (Word COM on Windows, LibreOffice on Linux)
   let pdfBuffer: Buffer | null = null;
-  let pageCount = 2; // assume 2 if we can't measure
-
-  const tmpDocx = join(tmpdir(), `akinyavuz_cv_${Date.now()}.docx`);
-  const tmpPdf = tmpDocx.replace('.docx', '.pdf');
+  let pageCount = 2;
 
   try {
-    writeFileSync(tmpDocx, docxBuffer);
-    pdfBuffer = convertToPdf(tmpDocx, tmpPdf);
+    pdfBuffer = await renderHtmlToPdf(cv, name);
     if (pdfBuffer) {
-      pageCount = await countPdfPages(pdfBuffer);
+      const pdfDoc = await PDFDocument.load(pdfBuffer);
+      pageCount = pdfDoc.getPageCount();
     }
-  } finally {
-    try { if (existsSync(tmpDocx)) require('fs').unlinkSync(tmpDocx); } catch {}
-    try { if (existsSync(tmpPdf)) require('fs').unlinkSync(tmpPdf); } catch {}
+  } catch {
+    // PDF generation failed — DOCX only
   }
 
   return { docxBuffer, pdfBuffer, pageCount };
 }
 
-function convertToPdf(docxPath: string, pdfPath: string): Buffer | null {
-  // Try Word COM automation first (Windows with Word installed)
+async function renderHtmlToPdf(cv: TailoredCV, name: string): Promise<Buffer> {
+  const html = buildHtml(cv, name);
+  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   try {
-    execSync(
-      `powershell -Command "` +
-      `$word = New-Object -ComObject Word.Application; ` +
-      `$word.Visible = $false; ` +
-      `$doc = $word.Documents.Open('${docxPath.replace(/\\/g, '\\\\')}'); ` +
-      `$doc.SaveAs([ref]'${pdfPath.replace(/\\/g, '\\\\')}', [ref]17); ` +
-      `$doc.Close(); ` +
-      `$word.Quit()"`,
-      { timeout: 30000 }
-    );
-    if (existsSync(pdfPath)) return readFileSync(pdfPath);
-  } catch {}
-
-  // Fallback: LibreOffice headless
-  try {
-    const outDir = tmpdir();
-    execSync(`soffice --headless --convert-to pdf --outdir "${outDir}" "${docxPath}"`, { timeout: 30000 });
-    if (existsSync(pdfPath)) return readFileSync(pdfPath);
-  } catch {}
-
-  return null;
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle' });
+    const pdf = await page.pdf({
+      format: 'A4',
+      margin: { top: '15mm', right: '18mm', bottom: '15mm', left: '18mm' },
+      printBackground: true,
+    });
+    return Buffer.from(pdf);
+  } finally {
+    await browser.close();
+  }
 }
 
-async function countPdfPages(pdfBuffer: Buffer): Promise<number> {
-  const pdfDoc = await PDFDocument.load(pdfBuffer);
-  return pdfDoc.getPageCount();
+function buildHtml(cv: TailoredCV, name: string): string {
+  const roles = cv.employment.map((role) => `
+    <div class="role">
+      <div class="role-header">
+        <span class="role-title">${role.title}</span>, <span class="role-company">${role.company}</span>
+        <span class="role-period">${role.period}</span>
+      </div>
+      <ul>${role.bullets.map((b) => `<li>${b}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #222; line-height: 1.35; }
+  h1 { font-size: 18pt; color: #1B4332; margin-bottom: 2px; }
+  .headline { font-size: 11pt; font-weight: bold; color: #1B4332; margin-bottom: 2px; }
+  .location { color: #666; margin-bottom: 12px; font-size: 10pt; }
+  h2 { font-size: 12pt; color: #1B4332; border-bottom: 1.5px solid #1B4332; margin: 12px 0 5px; padding-bottom: 2px; }
+  p { margin-bottom: 6px; }
+  ul { margin: 4px 0 4px 16px; }
+  li { margin-bottom: 3px; font-size: 10.5pt; }
+  .skills { font-size: 10.5pt; }
+  .role { margin-bottom: 8px; }
+  .role-header { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 2px; }
+  .role-title { font-weight: bold; font-size: 11pt; }
+  .role-company { font-size: 11pt; }
+  .role-period { color: #666; font-style: italic; font-size: 10pt; }
+  .certs { font-size: 10.5pt; }
+</style>
+</head>
+<body>
+  <h1>${name}</h1>
+  <div class="headline">Microsoft Certified BI Developer and Data Analyst</div>
+  <div class="location">${cv.location}</div>
+
+  <h2>Profile</h2>
+  <p>${cv.profile}</p>
+
+  <h2>Key Skills</h2>
+  <div class="skills">${cv.skills.join(' · ')}</div>
+
+  <h2>Employment History</h2>
+  ${roles}
+
+  <h2>Certifications</h2>
+  <div class="certs">${cv.certifications.join(' · ')}</div>
+
+  <h2>Education</h2>
+  <p>BA (Hons) Business Information Systems, Northumbria University (2011–2014)</p>
+
+  <h2>Achievements</h2>
+  <p>4x Gold Medallist — Powerlifting Commonwealth Games · Delivered report training internationally</p>
+</body>
+</html>`;
 }
 
 function buildDocument(cv: TailoredCV, candidateName: string): Document {
