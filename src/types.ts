@@ -38,6 +38,7 @@ export interface TailoredCV {
   employment: TailoredRole[];
   certifications: string[];
   location: string;
+  keyProjects?: { name: string; description: string }[];
 }
 
 export interface TailoredRole {

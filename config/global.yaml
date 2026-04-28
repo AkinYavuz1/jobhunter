@@ -23,6 +23,7 @@ retention:
 cv:
   max_pages: 2
   content_budget:
-    profile_sentences: 4
-    recent_role_bullets: 4    # NHS, Openwork, Good Energy
-    older_role_bullets: 2     # Holloway, 7 Layer, Car2U
+    profile_sentences: 5
+    recent_role_bullets: 6    # NHS, Openwork, Good Energy
+    older_role_bullets: 3     # Holloway, 7 Layer, Car2U
+    key_projects: 2

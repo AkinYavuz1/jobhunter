@@ -132,8 +132,9 @@ async function main() {
       // Update with obtainability score
       await saveJob(scoredJob);
 
-      // 6e. Render DOCX + PDF
-      const { docxBuffer, pdfBuffer, pageCount } = await renderCV(output.cv, 'Akin Yavuz');
+      // 6e. Render DOCX + PDF — merge top-level keyProjects into cv before passing to renderer
+      const cvForRender = { ...output.cv, keyProjects: output.keyProjects ?? [] };
+      const { docxBuffer, pdfBuffer, pageCount } = await renderCV(cvForRender, 'Akin Yavuz');
       logger.info('CV rendered', { id: job.id, pages: pageCount });
 
       // 6f. Upload to Storage

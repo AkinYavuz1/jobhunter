@@ -21,6 +21,7 @@ export interface GeneratorOutput {
   obtainabilityReason: string;
   coverLetter: string;
   cv: TailoredCV;
+  keyProjects?: { name: string; description: string }[];
 }
 
 export async function generateForJob(
@@ -31,8 +32,10 @@ export async function generateForJob(
   await rateLimit();
 
   const contentBudget = (globalConfig.cv as Record<string, unknown>)?.content_budget as Record<string, number> ?? {};
-  const recentBullets = contentBudget.recent_role_bullets ?? 4;
-  const olderBullets = contentBudget.older_role_bullets ?? 2;
+  const recentBullets = contentBudget.recent_role_bullets ?? 6;
+  const olderBullets = contentBudget.older_role_bullets ?? 3;
+  const profileSentences = contentBudget.profile_sentences ?? 5;
+  const keyProjectsCount = contentBudget.key_projects ?? 2;
 
   const systemPrompt = `You are a professional CV writer and UK recruitment specialist for data/BI roles.
 You tailor CVs to specific job descriptions and write concise cover letters.
@@ -67,11 +70,16 @@ Brief reason for the score.
 One paragraph. Confident and direct — no "I am writing to apply". Reference 1-2 specific quantified achievements. Mirror 2-3 key phrases from the JD naturally. End with a forward-looking sentence.
 
 ### cv (object)
-- profile: string, max ${contentBudget.profile_sentences ?? 4} sentences. Mirror 2-3 JD keywords naturally. Do NOT invent experience.
+- profile: string, max ${profileSentences} sentences. Mirror 2-3 JD keywords naturally. Do NOT invent experience.
 - skills: string[], reorder most relevant to THIS JD first. Add legitimate keywords from JD that match Akin's actual experience.
 - location: use "United Kingdom (Remote)"
 - certifications: string[], keep all, reorder if relevant
-- employment: array of roles. Recent roles (NHS, Openwork, Good Energy): max ${recentBullets} bullets. Older roles (Holloway, 7 Layer, Car2U): max ${olderBullets} bullets. Rephrase to mirror JD terminology where truthful. TOTAL bullets across ALL roles must be ≤22 (fits 2 A4 pages). Do NOT invent technologies or metrics.
+- employment: array of roles. Recent roles (NHS, Openwork, Good Energy): max ${recentBullets} bullets. Older roles (Holloway, 7 Layer, Car2U): max ${olderBullets} bullets. Rephrase to mirror JD terminology where truthful. TOTAL bullets across ALL roles must be ≤30 (fits 2 A4 pages). Do NOT invent technologies or metrics.
+
+### keyProjects (array of ${keyProjectsCount} objects)
+Select the ${keyProjectsCount} most relevant of Akin's key projects from his CV base and tailor the descriptions to the job description. Each object has:
+- name: string (project name)
+- description: string (max 50 words, tailored to JD)
 
 ## REQUIRED JSON SCHEMA
 {
@@ -91,7 +99,13 @@ One paragraph. Confident and direct — no "I am writing to apply". Reference 1-
         "bullets": [<string>]
       }
     ]
-  }
+  },
+  "keyProjects": [
+    {
+      "name": <string>,
+      "description": <string>
+    }
+  ]
 }
 
 Return ONLY the JSON object. No markdown. No explanation.`;
