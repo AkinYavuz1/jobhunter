@@ -9,11 +9,7 @@ export async function searchAdzuna(term: string): Promise<RawJob[]> {
     app_id: env.ADZUNA_APP_ID,
     app_key: env.ADZUNA_APP_KEY,
     results_per_page: '50',
-    what: term,
-    where: 'United Kingdom',
-    distance: '0',
-    'full_time': '1',
-    'permanent': '1',
+    what: `${term} remote`,   // searches full description; GB endpoint is already UK-only
     sort_by: 'date',
     max_days_old: '7',
   });
@@ -29,11 +25,6 @@ export async function searchAdzuna(term: string): Promise<RawJob[]> {
     if (!data.results?.length) break;
 
     for (const r of data.results) {
-      // Skip non-remote (Adzuna doesn't have a strict remote filter at query level)
-      const descLower = (r.description ?? '').toLowerCase();
-      const titleLower = r.title.toLowerCase();
-      if (!descLower.includes('remote') && !titleLower.includes('remote')) continue;
-
       const { min: salaryMin, max: salaryMax, period: salaryPeriod } = normaliseSalary(
         r.salary_min ?? null,
         r.salary_max ?? null,

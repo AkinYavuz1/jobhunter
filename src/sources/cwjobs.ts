@@ -3,7 +3,10 @@ import type { RawJob } from '../types.js';
 import { normaliseEmploymentType, normaliseSalary, canonicalUrl } from '../normalise.js';
 
 export async function searchCWJobs(term: string): Promise<RawJob[]> {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ['--disable-http2', '--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   });
@@ -12,7 +15,8 @@ export async function searchCWJobs(term: string): Promise<RawJob[]> {
   try {
     for (let page = 1; page <= 3; page++) {
       const encodedTerm = encodeURIComponent(term);
-      const url = `https://www.cwjobs.co.uk/jobs/${encodedTerm.replace(/%20/g, '-')}/in-united-kingdom?radius=0&postedWithin=7&contractType=permanent&remote=true&page=${page}`;
+      const slug = encodedTerm.replace(/%20/g, '-').toLowerCase();
+      const url = `https://www.cwjobs.co.uk/jobs/${slug}/in-united-kingdom?radius=0&postedWithin=7&contractType=permanent&remote=true&page=${page}`;
 
       const p = await context.newPage();
       await p.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });

@@ -5,8 +5,8 @@ import yaml from 'js-yaml';
 import type { RawJob, ScoredJob, RunSummary } from './types.js';
 import { searchAdzuna } from './sources/adzuna.js';
 import { searchReed } from './sources/reed.js';
-import { searchTotalJobs } from './sources/totaljobs.js';
-import { searchCWJobs } from './sources/cwjobs.js';
+// TotalJobs + CWJobs block headless Chromium even on residential IP (Stepstone CDN bot detection)
+// Adzuna aggregates their listings anyway so coverage is maintained
 import { deduplicate } from './dedup.js';
 import { passesHardFilters } from './normalise.js';
 import { fetchFullDescription, needsFullDescription } from './fetch-detail.js';
@@ -67,12 +67,10 @@ async function main() {
     const results = await Promise.allSettled([
       searchAdzuna(term),
       searchReed(term),
-      searchTotalJobs(term),
-      searchCWJobs(term),
     ]);
 
     for (const [i, result] of results.entries()) {
-      const sourceName = ['adzuna', 'reed', 'totaljobs', 'cwjobs'][i];
+      const sourceName = ['adzuna', 'reed'][i];
       if (result.status === 'fulfilled') {
         allJobs.push(...result.value);
         logger.info('Source collected', { source: sourceName, term, count: result.value.length });
