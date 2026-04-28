@@ -1,0 +1,144 @@
+name: Akin Yavuz
+headline: Microsoft Certified BI Developer and Data Analyst
+location: Scotland, United Kingdom
+phone: "07949116770"
+email: akinyavuz@outlook.com
+portfolio: akinyavuz.co.uk
+
+profile: >
+  Microsoft Certified BI Developer and Data Analyst with 10+ years' experience
+  delivering data solutions across healthcare, financial services, energy, and software
+  sectors. Expert in Power BI, SQL, Azure, and Tableau — designing and building
+  scalable ETL/ELT pipelines, data warehouses, and modern data platforms that turn
+  raw data into trusted, analytics-ready datasets. Detail-oriented and delivery-focused,
+  with strong Excel skills for manipulating and validating large datasets.
+
+skills:
+  data_engineering:
+    - SQL
+    - Power BI
+    - DAX / Power Query
+    - Excel (Advanced)
+    - ETL / ELT Pipelines
+    - Data Modelling
+    - Data Cleansing & Validation
+    - Tableau
+    - Azure Data Factory
+    - PostgreSQL
+    - Data Warehouse (DWH)
+    - SSRS
+    - Python
+  systems_and_platforms:
+    - Microsoft Fabric
+    - Source Control / Git
+  delivery_and_tooling:
+    - Agile / Scrum
+    - Microsoft DevOps
+  tools:
+    - SSMS
+    - VS Code
+    - Power BI Service
+    - Azure Portal
+    - Power BI Gateway
+  methodologies:
+    - UAT / User Acceptance Testing
+    - Data Reconciliation
+    - Data Governance
+    - Requirements Gathering
+    - Stakeholder Management
+    - Documentation & Handover
+    - Training & Knowledge Transfer
+
+certifications:
+  - MS Certified Power BI Data Analyst
+  - Microsoft Certified SQL Developer
+  - Certified Scrum Master
+  - Diploma in Leadership & Management
+
+domain_knowledge:
+  - Financial Services & Compliance
+  - Energy & Utilities
+
+employment:
+  - title: Principal Insight Developer
+    company: NHS Arden and Gem CSU
+    period: "OCT 2022 — PRESENT"
+    bullets:
+      - "Architected 20+ Power BI dashboards across 5+ NHS trusts, driving decisions on patient flow, staffing, and service efficiency."
+      - "Led data mapping and transformation activities across multiple NHS datasets, ensuring consistency and alignment with business processes."
+      - "Established data quality standards and validation procedures department-wide, raising report accuracy and consistency across live environments."
+      - "Built KPIs tracking healthcare outcomes, capacity planning, and workforce management for senior leadership."
+      - "Performed data cleansing and reconciliation on large datasets using Excel and SQL, identifying and resolving data quality issues before reporting."
+      - "Managed data onboarding for newly integrated NHS trusts, extracting data from legacy systems and preparing it for migration into centralised reporting platforms."
+      - "Defined and documented data mapping specifications between source and target systems, ensuring completeness and accuracy across all datasets."
+
+  - title: Senior MI Analyst
+    company: The Openwork Partnership
+    period: "MAR 2020 — OCT 2022"
+    bullets:
+      - "Developed 50+ SSRS reports automating manual processes, saving 40 hours of staff time per month."
+      - "Built Power BI datasets from an Azure Data Warehouse and performed data mapping between source and target systems, embedding into Dynamics 365 CRM for self-service reporting."
+      - "Authored SQL stored procedures supporting Finance audit testing, data validation, and compliance reporting."
+      - "Used Excel extensively to manipulate, validate, and reconcile large datasets, identifying and resolving data quality issues across business-critical environments."
+      - "Designed and maintained ETL pipelines using SSIS and Azure Data Factory to move data between legacy systems and the Azure Data Warehouse."
+      - "Collaborated with business stakeholders to define data requirements and acceptance criteria for system migration deliverables."
+      - "Designed star schema data models in the Azure Data Warehouse to support self-service reporting across finance and compliance."
+
+  - title: BI Developer
+    company: Good Energy
+    period: "DEC 2018 — MAR 2020"
+    bullets:
+      - "Maintained Power BI dashboards reported externally to Ofgem, Citizens Advice, and Government departments on company finances and customer statistics."
+      - "Led data migration of 20+ Power BI and SSRS reports to a new CRM system, performing data mapping between source and target systems with zero data loss or disruption."
+      - "Built and maintained ETL pipelines to extract and transform energy sector data for regulatory reporting to Ofgem and Government departments."
+
+  - title: BI Analyst
+    company: Holloway Friendly
+    period: "JUN 2018 — DEC 2018"
+    bullets:
+      - "Diagnosed and resolved data quality and performance issues in legacy Power BI reports, significantly reducing load times."
+      - "Optimised SQL queries and data models underpinning legacy Power BI reports, significantly improving report performance."
+
+  - title: Report Developer
+    company: 7 Layer Solutions
+    period: "MAR 2016 — JUN 2018"
+    bullets:
+      - "Delivered Power BI dashboards for Retail and Banking clients in an Agile environment, translating stakeholder requirements into reporting solutions."
+      - "Performed data extraction, cleansing, and transformation from multiple source systems, mapping data structures to target reporting platforms."
+      - "Designed dimensional data models for client reporting platforms, implementing star schemas to support scalable analytics."
+      - "Worked hands-on with large datasets in Excel, using formulas and lookups to validate and reconcile data across systems."
+
+  - title: Business Analyst
+    company: Car2U
+    period: "NOV 2014 — NOV 2015"
+    bullets:
+      - "Used data analytics and Excel to manipulate large datasets, optimising vehicle return timing and detecting damage to reduce fleet costs measurably."
+      - "Performed data cleansing and validation across operational datasets in a live, business-critical environment."
+
+education:
+  - degree: "Undergraduate Degree (BA Hons)"
+    institution: Northumbria University, Newcastle
+    period: "2011 — 2014"
+    subject: Business Information Systems
+
+key_projects:
+  - name: "Azure Data Warehouse Build (Openwork)"
+    description: "Designed and built an Azure-hosted data warehouse using star schema modelling, integrating data from multiple legacy systems via ETL pipelines. Enabled self-service Power BI reporting for finance and compliance teams."
+  - name: "NHS Multi-Trust Dashboard Platform (Arden & GEM CSU)"
+    description: "Architected a standardised Power BI reporting platform serving 5+ NHS trusts, designing reusable data models and ETL pipelines to ingest disparate healthcare datasets into a unified reporting layer."
+  - name: "NHS Trust Data Onboarding (Arden & GEM CSU)"
+    description: "Managed data onboarding for newly acquired NHS trusts, extracting data from legacy systems, cleansing and transforming it, and preparing it for migration into centralised reporting platforms."
+
+achievements:
+  - "4x Gold Medallist — Powerlifting Commonwealth Games"
+  - "Delivered report training internationally across multiple countries"
+
+portfolio_projects:
+  - name: Daily Duel
+    description: "Full-stack web app with PostgreSQL database, user auth, and leaderboards"
+  - name: Not An Octavia
+    description: "ML model trained on curated car data to surface high-value deals"
+  - name: DG Directory
+    description: "BI-driven business directory: 197 businesses scraped, scored, and built into a live product with Supabase and Stripe"
+  - name: Gains AI
+    description: "AI gym tracker with analytics dashboard, program builder, and Stripe subscriptions — gainsai.uk"

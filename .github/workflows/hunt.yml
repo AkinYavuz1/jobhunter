@@ -1,0 +1,44 @@
+name: Job Hunter
+
+on:
+  schedule:
+    - cron: '0 8,18 * * *'   # 08:00 + 18:00 UTC (offset from bargainhunter's 07:00/19:00)
+  workflow_dispatch:
+
+jobs:
+  hunt:
+    name: Job Hunter
+    runs-on: self-hosted
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium
+
+      - name: Run job hunter
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NTFY_JOB_TOPIC: ${{ secrets.NTFY_JOB_TOPIC }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DIGEST_EMAIL: ${{ secrets.DIGEST_EMAIL }}
+          RESEND_FROM: ${{ secrets.RESEND_FROM }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          REED_API_KEY: ${{ secrets.REED_API_KEY }}
+        run: pnpm hunt
+
+      - name: Upload run summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-summary-${{ github.run_id }}
+          path: ${{ runner.temp }}/jobhunter-last-run.json
+          retention-days: 7
+          if-no-files-found: warn
