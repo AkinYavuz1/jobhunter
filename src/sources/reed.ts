@@ -55,8 +55,8 @@ export async function searchReed(term: string): Promise<RawJob[]> {
         employmentType,
         description: r.jobDescription ?? null,
         descriptionFull: false,
-        url: `https://www.reed.co.uk/jobs/${r.jobId}`,
-        urlCanonical: canonicalUrl(`https://www.reed.co.uk/jobs/${r.jobId}`),
+        url: r.jobUrl ?? `https://www.reed.co.uk/jobs/${r.jobId}`,
+        urlCanonical: canonicalUrl(r.jobUrl ?? `https://www.reed.co.uk/jobs/${r.jobId}`),
         postedAt: (() => { const d = r.date ? new Date(r.date) : null; return d && !isNaN(d.getTime()) ? d : null; })(),
         raw: r,
       });
@@ -81,5 +81,6 @@ interface ReedJob {
   minimumSalary?: number;
   maximumSalary?: number;
   jobDescription?: string;
+  jobUrl?: string;
   date?: string;
 }
