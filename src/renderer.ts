@@ -73,11 +73,20 @@ export async function renderCV(cv: TailoredCV, name: string): Promise<RenderedCV
   return { docxBuffer, pdfBuffer, pageCount };
 }
 
+// Persistent browser — launched once, reused across all PDF renders (~2-3s saved per call)
+let _browser: import('playwright').Browser | null = null;
+
+async function getBrowser(): Promise<import('playwright').Browser> {
+  if (_browser && _browser.isConnected()) return _browser;
+  _browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+  return _browser;
+}
+
 async function renderHtmlToPdf(cv: TailoredCV, name: string): Promise<Buffer> {
   const html = buildHtml(cv, name);
-  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+  const browser = await getBrowser();
+  const page = await browser.newPage();
   try {
-    const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle' });
     const pdf = await page.pdf({
       format: 'A4',
@@ -86,7 +95,7 @@ async function renderHtmlToPdf(cv: TailoredCV, name: string): Promise<Buffer> {
     });
     return Buffer.from(pdf);
   } finally {
-    await browser.close();
+    await page.close();  // close page, not browser
   }
 }
 
