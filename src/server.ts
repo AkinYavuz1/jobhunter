@@ -7,7 +7,8 @@ import { generateForJob, mergeIntoScoredJob } from './generator.js';
 import { renderCV } from './renderer.js';
 import { saveJob, saveDocument, uploadFile, getSignedUrl } from './storage.js';
 import { fetchFullDescription, needsFullDescription } from './fetch-detail.js';
-import { readFileSync } from 'fs';
+import { readFileSync, mkdirSync, writeFileSync } from 'fs';
+import { homedir } from 'os';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
@@ -150,7 +151,16 @@ app.post('/api/generate', async (req, res) => {
     const cvForRender = { ...output.cv, keyProjects: output.keyProjects ?? [] };
     const { docxBuffer, pdfBuffer, pageCount } = await renderCV(cvForRender, 'Akin Yavuz');
 
-    // Upload
+    // Save to Downloads folder — Company - Job Title
+    const folderName = sanitiseFolderName(`${row.company ?? 'Unknown'} - ${row.title}`);
+    const localDir = join(homedir(), 'Downloads', folderName);
+    mkdirSync(localDir, { recursive: true });
+    writeFileSync(join(localDir, 'akinyavuz_cv.docx'), docxBuffer);
+    if (pdfBuffer) writeFileSync(join(localDir, 'akinyavuz_cv.pdf'), pdfBuffer);
+    writeFileSync(join(localDir, 'akinyavuz_cover_letter.txt'), output.coverLetter, 'utf-8');
+    console.log(`Files saved → ${localDir}`);
+
+    // Upload to Supabase Storage
     const fp = `jobs/${id}/`;
     await uploadFile(`${fp}akinyavuz_cv.docx`, docxBuffer, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     if (pdfBuffer) await uploadFile(`${fp}akinyavuz_cv.pdf`, pdfBuffer, 'application/pdf');
@@ -164,7 +174,7 @@ app.post('/api/generate', async (req, res) => {
       getSignedUrl(`${fp}akinyavuz_cover_letter.txt`),
     ]);
 
-    res.json({ docxUrl, pdfUrl, txtUrl, coverLetter: output.coverLetter, obtainability: output.obtainability });
+    res.json({ docxUrl, pdfUrl, txtUrl, coverLetter: output.coverLetter, obtainability: output.obtainability, localDir });
   } catch (err) {
     res.status(500).json({ error: (err as Error).message });
   }
@@ -177,6 +187,16 @@ app.listen(PORT, () => {
   console.log(`Dashboard: ${url}`);
   exec(`start ${url}`);
 });
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function sanitiseFolderName(name: string): string {
+  return name
+    .replace(/[\\/:*?"<>|]/g, '')   // strip Windows-invalid chars
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80);                   // keep paths reasonable
+}
 
 // ── HTML builder ──────────────────────────────────────────────────────────────
 
@@ -283,7 +303,8 @@ function buildPage(jobRows: string, total: number): string {
           docsDiv.innerHTML =
             '<a href="' + data.docxUrl + '" target="_blank" class="btn-doc">📄 CV (.docx)</a>' +
             (data.pdfUrl ? '<a href="' + data.pdfUrl + '" target="_blank" class="btn-doc">📋 CV (.pdf)</a>' : '') +
-            '<a href="' + data.txtUrl + '" target="_blank" class="btn-doc">✉️ Cover letter</a>';
+            '<a href="' + data.txtUrl + '" target="_blank" class="btn-doc">✉️ Cover letter</a>' +
+            (data.localDir ? '<span style="font-size:12px;color:#6b7280;margin-left:8px">📁 Saved to Downloads/' + data.localDir.split(/[\\/]/).pop() + '</span>' : '');
         }
         const nodocsDiv = document.getElementById('nodocs_' + safeId);
         if (nodocsDiv) nodocsDiv.remove();
