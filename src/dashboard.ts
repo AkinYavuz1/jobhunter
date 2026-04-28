@@ -94,8 +94,17 @@ for (const job of jobs) {
     ? new Date(job.posted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'Recently';
 
+  const safeId = (job.id as string).replace(/[^a-zA-Z0-9_-]/g, '_');
+  const appliedClass = job.applied ? ' card-applied' : '';
+
+  const actionButtons = job.applied
+    ? `<span class="applied-badge">✓ Applied</span>`
+    : `<a href="${job.url}" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('${job.id}', '${safeId}')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('${safeId}')">✕ Not Interested</button>`;
+
   jobRows.push(`
-    <div class="job-card" id="${job.id}">
+    <div class="job-card${appliedClass}" id="card_${safeId}" data-id="${job.id}">
       <div class="job-header">
         <div class="job-title-row">
           ${obtainBadge}
@@ -117,8 +126,7 @@ for (const job of jobs) {
       ${docsHtml}
       ${coverHtml}
       <div class="job-actions">
-        <a href="${job.url}" target="_blank" class="btn-apply">Apply Now →</a>
-        ${job.applied ? '<span class="applied-badge">✓ Applied</span>' : ''}
+        ${actionButtons}
       </div>
     </div>
   `);
@@ -162,10 +170,17 @@ const html = `<!DOCTYPE html>
     .btn-doc:hover { background: #d1fae5; }
     .no-docs { font-size: 13px; color: #999; margin: 10px 0; font-style: italic; }
     .cover-letter { margin: 12px 0; padding: 14px 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 6px; font-size: 13px; line-height: 1.6; color: #444; }
-    .job-actions { margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+    .job-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .btn-apply { display: inline-block; background: #1B4332; color: white; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
     .btn-apply:hover { background: #155127; }
-    .applied-badge { font-size: 13px; color: #059669; font-weight: 600; }
+    .btn-action { border: none; cursor: pointer; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+    .btn-applied { background: #d1fae5; color: #065f46; }
+    .btn-applied:hover { background: #a7f3d0; }
+    .btn-dismiss { background: #fee2e2; color: #991b1b; }
+    .btn-dismiss:hover { background: #fecaca; }
+    .applied-badge { font-size: 13px; color: #059669; font-weight: 700; }
+    .card-applied { border-color: #6ee7b7; background: #f0fdf4; }
+    .card-dismissed { opacity: 0.45; border-style: dashed; }
     .hidden { display: none !important; }
     .no-results { text-align: center; color: #999; padding: 48px; font-size: 15px; }
   </style>
@@ -185,6 +200,7 @@ const html = `<!DOCTYPE html>
       <option value="85">85+</option>
     </select></label>
     <label><input type="checkbox" id="docsOnly" onchange="filterJobs()"/> CVs ready only</label>
+    <label><input type="checkbox" id="showDismissed" onchange="filterJobs()"/> Show dismissed</label>
     <span class="count" id="countLabel">${jobs.length} jobs</span>
   </div>
   <main id="jobList">
@@ -192,23 +208,102 @@ const html = `<!DOCTYPE html>
     <div class="no-results hidden" id="noResults">No jobs match your filters.</div>
   </main>
   <script>
+    const SUPABASE_URL = '${process.env.SUPABASE_URL}';
+    const SUPABASE_KEY = '${process.env.SUPABASE_SERVICE_KEY}';
+
+    // ── Dismissed state (localStorage) ──────────────────────────────────────
+    function getDismissed() {
+      return new Set(JSON.parse(localStorage.getItem('jh_dismissed') || '[]'));
+    }
+    function saveDismissed(set) {
+      localStorage.setItem('jh_dismissed', JSON.stringify([...set]));
+    }
+
+    function dismiss(safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      const jobId = card.dataset.id;
+      const dismissed = getDismissed();
+      dismissed.add(jobId);
+      saveDismissed(dismissed);
+      card.classList.add('card-dismissed');
+      filterJobs();
+    }
+
+    function undismiss(safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      const jobId = card.dataset.id;
+      const dismissed = getDismissed();
+      dismissed.delete(jobId);
+      saveDismissed(dismissed);
+      card.classList.remove('card-dismissed');
+      filterJobs();
+    }
+
+    // ── Applied state (Supabase) ─────────────────────────────────────────────
+    async function markApplied(jobId, safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/jh_jobs?id=eq.' + encodeURIComponent(jobId), {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ applied: true, applied_at: new Date().toISOString() }),
+        });
+        if (res.ok || res.status === 204) {
+          card.classList.add('card-applied');
+          const actions = card.querySelector('.job-actions');
+          if (actions) actions.innerHTML = '<span class="applied-badge">✓ Applied</span>';
+        } else {
+          alert('Failed to mark applied — check your connection.');
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ── Filter ───────────────────────────────────────────────────────────────
     function filterJobs() {
       const q = document.getElementById('search').value.toLowerCase();
       const minScore = parseInt(document.getElementById('minScore').value);
       const docsOnly = document.getElementById('docsOnly').checked;
+      const showDismissed = document.getElementById('showDismissed').checked;
+      const dismissed = getDismissed();
       let count = 0;
+
       document.querySelectorAll('.job-card').forEach(card => {
+        const jobId = card.dataset.id;
+        const isDismissed = dismissed.has(jobId);
         const text = card.textContent.toLowerCase();
         const badge = card.querySelector('.badge');
         const score = badge ? parseInt(badge.textContent) || 0 : 0;
         const hasDocs = card.querySelector('.btn-doc') !== null;
-        const show = (!q || text.includes(q)) && score >= minScore && (!docsOnly || hasDocs);
+        const passesFilters = (!q || text.includes(q)) && score >= minScore && (!docsOnly || hasDocs);
+        const show = passesFilters && (!isDismissed || showDismissed);
         card.classList.toggle('hidden', !show);
+        if (isDismissed) card.classList.add('card-dismissed');
         if (show) count++;
       });
+
       document.getElementById('countLabel').textContent = count + ' jobs';
       document.getElementById('noResults').classList.toggle('hidden', count > 0);
     }
+
+    // ── Init: apply dismissed state on load ──────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const dismissed = getDismissed();
+      dismissed.forEach(jobId => {
+        const card = document.querySelector('[data-id="' + jobId + '"]');
+        if (card) card.classList.add('card-dismissed');
+      });
+      filterJobs();
+    });
   </script>
 </body>
 </html>`;

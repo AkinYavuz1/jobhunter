@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Job Hunter Dashboard — 23 jobs</title>
+  <title>Job Hunter Dashboard — 24 jobs</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #222; }
@@ -36,10 +36,17 @@
     .btn-doc:hover { background: #d1fae5; }
     .no-docs { font-size: 13px; color: #999; margin: 10px 0; font-style: italic; }
     .cover-letter { margin: 12px 0; padding: 14px 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 6px; font-size: 13px; line-height: 1.6; color: #444; }
-    .job-actions { margin-top: 14px; display: flex; align-items: center; gap: 12px; }
+    .job-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .btn-apply { display: inline-block; background: #1B4332; color: white; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600; }
     .btn-apply:hover { background: #155127; }
-    .applied-badge { font-size: 13px; color: #059669; font-weight: 600; }
+    .btn-action { border: none; cursor: pointer; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+    .btn-applied { background: #d1fae5; color: #065f46; }
+    .btn-applied:hover { background: #a7f3d0; }
+    .btn-dismiss { background: #fee2e2; color: #991b1b; }
+    .btn-dismiss:hover { background: #fecaca; }
+    .applied-badge { font-size: 13px; color: #059669; font-weight: 700; }
+    .card-applied { border-color: #6ee7b7; background: #f0fdf4; }
+    .card-dismissed { opacity: 0.45; border-style: dashed; }
     .hidden { display: none !important; }
     .no-results { text-align: center; color: #999; padding: 48px; font-size: 15px; }
   </style>
@@ -47,7 +54,7 @@
 <body>
   <header>
     <h1>💼 Job Hunter Dashboard</h1>
-    <div class="meta">Generated 28/04/2026, 20:58:05 · 23 jobs · sorted by obtainability</div>
+    <div class="meta">Generated 28/04/2026, 21:09:19 · 24 jobs · sorted by obtainability</div>
   </header>
   <div class="filters">
     <input type="text" id="search" placeholder="Search title, company..." oninput="filterJobs()"/>
@@ -59,11 +66,12 @@
       <option value="85">85+</option>
     </select></label>
     <label><input type="checkbox" id="docsOnly" onchange="filterJobs()"/> CVs ready only</label>
-    <span class="count" id="countLabel">23 jobs</span>
+    <label><input type="checkbox" id="showDismissed" onchange="filterJobs()"/> Show dismissed</label>
+    <span class="count" id="countLabel">24 jobs</span>
   </div>
   <main id="jobList">
     
-    <div class="job-card" id="adzuna:5709979887">
+    <div class="job-card" id="card_adzuna_5709979887" data-id="adzuna:5709979887">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge green">90/100</span>
@@ -83,19 +91,20 @@
       </div>
       <div class="reason">Akin's CV shows strong overlap with the job description, with experience in Power BI, SQL, and Azure, and correct seniority as a Principal Insight Developer.</div>
       <div class="doc-links">
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.uE3r37TP_6jG5Iy2ZY71rJnSniSIQy0uStoMlcgjq1k" target="_blank" class="btn-doc">📄 CV (.docx)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.DF2b7I9U6nDg1CLojXr0lCWxZ6w8fygMB4bY8XKi-fA" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.tM_3I1cYgwFoPaZSRzsjXNoKCssGozZxO2QLIgn8_24" target="_blank" class="btn-doc">✉️ Cover letter</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDY5NTgsImV4cCI6MTc3ODAxMTc1OH0.xfegqzcMEFZUCS3miML7eY1ou96cvpjMOWTFMgTGWH0" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjk1OCwiZXhwIjoxNzc4MDExNzU4fQ.43xPoBJWwUbbSV_BQX3Qa4O8v7hFTbXSeIpB5t4Ao2Q" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709979887/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk5Nzk4ODcvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDY5NTgsImV4cCI6MTc3ODAxMTc1OH0.txu2HXdIGHOYqnVCSXG5vO0-Kqbu6K4IfKzFpbC7ROQ" target="_blank" class="btn-doc">✉️ Cover letter</a>
       </div>
       <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>As a seasoned BI Developer with a passion for turning data into meaningful insights, I am excited about the opportunity to join Trustmarque and drive business decisions. With a track record of delivering 20+ Power BI dashboards and building KPIs tracking healthcare outcomes, I am confident in my ability to shape how data is transformed and consumed across the organisation. I look forward to discussing how my skills can support Trustmarque's data team.</div>
       <div class="job-actions">
         <a href="https://www.adzuna.co.uk/jobs/land/ad/5709979887?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=46B4E58F5135D752B07DECCA59146595671B38E5" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5709979887', 'adzuna_5709979887')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5709979887')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5709492976">
+    <div class="job-card" id="card_adzuna_5709492976" data-id="adzuna:5709492976">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge green">90/100</span>
@@ -115,19 +124,20 @@
       </div>
       <div class="reason">Akin's CV shows strong overlap with the job description, particularly in Power BI, SQL, and Azure, with correct seniority and direct employer experience.</div>
       <div class="doc-links">
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.ILDJ-7FwOn1fXP4PBaf2YXUWlS1CWGo4qwwRqTi48r4" target="_blank" class="btn-doc">📄 CV (.docx)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.14fzc14dWRNrcBk7k6xk6eGD6DE-gpCdaCyXIxho1N0" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDYyODQsImV4cCI6MTc3ODAxMTA4NH0.qs3I3dDcYYBChp1JvqeMyB_MED6qnWpQPC8qBUNxj04" target="_blank" class="btn-doc">✉️ Cover letter</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LmRvY3giLCJpYXQiOjE3Nzc0MDY5NTgsImV4cCI6MTc3ODAxMTc1OH0.38EHVSk3MbbRyqYnPStvQ0nKVio3Oh3SGK_tGEEYMU4" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2N2LnBkZiIsImlhdCI6MTc3NzQwNjk1OSwiZXhwIjoxNzc4MDExNzU5fQ.0MepyLtNcvrQYDv3yL_4hn7Dx15qqckoHCYQ58ga8vI" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/adzuna:5709492976/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvYWR6dW5hOjU3MDk0OTI5NzYvYWtpbnlhdnV6X2NvdmVyX2xldHRlci50eHQiLCJpYXQiOjE3Nzc0MDY5NTksImV4cCI6MTc3ODAxMTc1OX0.A0QEZqX9YCoDuiaVYp6Eh7j3wK2hYbpFzpePbuAU2vw" target="_blank" class="btn-doc">✉️ Cover letter</a>
       </div>
       <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>As a seasoned Power BI Specialist, I drive business decisions with data-driven insights. I architected 20+ Power BI dashboards across 5+ NHS trusts, driving decisions on patient flow and service efficiency. I am excited to bring my expertise to Hays Technology and help the business make informed decisions with automated reports and dashboards.</div>
       <div class="job-actions">
         <a href="https://www.adzuna.co.uk/jobs/land/ad/5709492976?se=SmaDGDxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=588E44F50FBBBE4B389E3B617D477FA15C99E42E" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5709492976', 'adzuna_5709492976')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5709492976')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56752753">
+    <div class="job-card" id="card_reed_56752753" data-id="reed:56752753">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge green">85/100</span>
@@ -147,131 +157,20 @@
       </div>
       <div class="reason">Akin's CV shows strong overlap with the job description, particularly in Power BI, SQL, and Azure, and he has the correct seniority level as a Principal Insight Developer.</div>
       <div class="doc-links">
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YuZG9jeCIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.DNLteCu9YGkQ7ueULg2Jl_aRec5nPNXkgPOG9L_sH78" target="_blank" class="btn-doc">📄 CV (.docx)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YucGRmIiwiaWF0IjoxNzc3NDA2Mjg0LCJleHAiOjE3NzgwMTEwODR9.hH5KE7YSKcAbi5jnqBYvTI_SLwot0Y4enLfmmJRjJTk" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
-        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY292ZXJfbGV0dGVyLnR4dCIsImlhdCI6MTc3NzQwNjI4NCwiZXhwIjoxNzc4MDExMDg0fQ.6zwW6k0Klbj3HhSO9EeaOGA6QY5fgV05uHkERlyQRGY" target="_blank" class="btn-doc">✉️ Cover letter</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.docx?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YuZG9jeCIsImlhdCI6MTc3NzQwNjk1OSwiZXhwIjoxNzc4MDExNzU5fQ.12sjSonFuIGf29AhfP_26N6uJ4ikjiJVAnBdkpZnm-g" target="_blank" class="btn-doc">📄 CV (.docx)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cv.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY3YucGRmIiwiaWF0IjoxNzc3NDA2OTU5LCJleHAiOjE3NzgwMTE3NTl9.nt-kG7npM80hmyQB1gVI4S2hNKENW7aZ7Y1hJS6UBqo" target="_blank" class="btn-doc">📋 CV (.pdf)</a>
+        <a href="https://mrdozyxbonbukpmywxqi.supabase.co/storage/v1/object/sign/jobhuntremote/jobs/reed:56752753/akinyavuz_cover_letter.txt?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZDM5ODg4MS1jZmM2LTRjMmUtOGY3ZC1kYjE5ZDRiOWY4ODkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJqb2JodW50cmVtb3RlL2pvYnMvcmVlZDo1Njc1Mjc1My9ha2lueWF2dXpfY292ZXJfbGV0dGVyLnR4dCIsImlhdCI6MTc3NzQwNjk1OSwiZXhwIjoxNzc4MDExNzU5fQ.gqdTC5BUDZ0ghzY8w2zAGrvf-I42r1PkmiyJK8c1ceQ" target="_blank" class="btn-doc">✉️ Cover letter</a>
       </div>
       <div class="cover-letter"><strong>Cover letter:</strong><br/><br/>With a proven track record of designing and developing modern data platforms, I am confident in my ability to support analytics, reporting, and AI-driven initiatives through reliable, secure, and scalable data infrastructure. I have architected 20+ Power BI dashboards and led data mapping and transformation activities across multiple NHS datasets. I look forward to discussing how my skills can drive business growth in this Senior Data Engineer role.</div>
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56752753" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56752753', 'reed_56752753')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56752753')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56756713">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56756713" target="_blank">Data Engineer</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Erin Associates</span>
-          <span class="sep">·</span>
-          <span class="salary">£55k – £60k</span>
-          <span class="sep">·</span>
-          <span class="location">West Yorkshire</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 4 Aug 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56756713" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56589647">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56589647" target="_blank">Business Development & Marketing Coordinator</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Larbey Evans</span>
-          <span class="sep">·</span>
-          <span class="salary">£40k – £50k</span>
-          <span class="sep">·</span>
-          <span class="location">EC2N4AG</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 3 Jun 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56589647" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56733243">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56733243" target="_blank">Proclaim Developer</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Express Solicitors</span>
-          <span class="sep">·</span>
-          <span class="salary">£40k – £50k</span>
-          <span class="sep">·</span>
-          <span class="location">M224SN</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 4 Jan 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56733243" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56760229">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56760229" target="_blank">Analytics Engineer (12 month FTC)</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Harnham - Data & Analytics Recruitment</span>
-          <span class="sep">·</span>
-          <span class="salary">£57k – £67k</span>
-          <span class="sep">·</span>
-          <span class="location">Newcastle Upon Tyne</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 4 Aug 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56760229" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56735973">
+    <div class="job-card" id="card_reed_56735973" data-id="reed:56735973">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -294,16 +193,17 @@
       
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56735973" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56735973', 'reed_56735973')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56735973')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5712890082">
+    <div class="job-card" id="card_adzuna_5712890082" data-id="adzuna:5712890082">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank">Business Analyst - Compliance & Data</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=vlEA-jxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank">Business Analyst - Compliance & Data</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">Randstad Technologies</span>
@@ -321,17 +221,18 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712890082?se=vlEA-jxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=456CB97B89A5C7AB629C42784224C4571BAEE16D" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5712890082', 'adzuna_5712890082')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5712890082')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5712841148">
+    <div class="job-card" id="card_adzuna_5712841148" data-id="adzuna:5712841148">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank">Business Analyst - Compliance & Data</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=vlEA-jxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank">Business Analyst - Compliance & Data</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">Randstad Technologies Recruitment</span>
@@ -349,13 +250,14 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=sN3cGDxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712841148?se=vlEA-jxD8RGkBsRqmEnvIw&utm_medium=api&utm_source=047c4a0b&v=4E080EBE6086D109B01EDB88EC91B819F9E292DA" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5712841148', 'adzuna_5712841148')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5712841148')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5712865982">
+    <div class="job-card" id="card_adzuna_5712865982" data-id="adzuna:5712865982">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -378,16 +280,17 @@
       
       <div class="job-actions">
         <a href="https://www.adzuna.co.uk/jobs/details/5712865982?utm_medium=api&utm_source=047c4a0b" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5712865982', 'adzuna_5712865982')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5712865982')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5712046237">
+    <div class="job-card" id="card_adzuna_5712046237" data-id="adzuna:5712046237">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank">Senior Data Engineer (AWS, Airflow, DBT)</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank">Senior Data Engineer (AWS, Airflow, DBT)</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">Harnham - Data & Analytics Recruitment</span>
@@ -405,17 +308,18 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5712046237?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=9FA4206CDEA2B883300AFFBCDFA33AD1C6B0C27E" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5712046237', 'adzuna_5712046237')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5712046237')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5709980030">
+    <div class="job-card" id="card_adzuna_5709980030" data-id="adzuna:5709980030">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank">Principal Engineer</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank">Principal Engineer</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">Digital Skills ltd</span>
@@ -433,17 +337,18 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709980030?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=D55345DE5227E2B608A15FF676CB66C65B56FFCF" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5709980030', 'adzuna_5709980030')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5709980030')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5709358830">
+    <div class="job-card" id="card_adzuna_5709358830" data-id="adzuna:5709358830">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank">Data Engineer (Snowflake/ AWS) - REMOTE</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank">Data Engineer (Snowflake/ AWS) - REMOTE</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">Hays Specialist Recruitment Limited</span>
@@ -461,13 +366,14 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5709358830?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=B59047B17747253DC2893D486DA415F36E37170E" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5709358830', 'adzuna_5709358830')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5709358830')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5709299464">
+    <div class="job-card" id="card_adzuna_5709299464" data-id="adzuna:5709299464">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -490,16 +396,17 @@
       
       <div class="job-actions">
         <a href="https://www.adzuna.co.uk/jobs/details/5709299464?utm_medium=api&utm_source=047c4a0b" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5709299464', 'adzuna_5709299464')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5709299464')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="adzuna:5707204500">
+    <div class="job-card" id="card_adzuna_5707204500" data-id="adzuna:5707204500">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank">Principal Data Engineer</a></h2>
+          <h2><a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank">Principal Data Engineer</a></h2>
         </div>
         <div class="job-meta">
           <span class="company">VIQU IT Recruitment</span>
@@ -517,41 +424,14 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=TmYaGTxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.adzuna.co.uk/jobs/land/ad/5707204500?se=lL_A-jxD8RGLLrIe10BuwQ&utm_medium=api&utm_source=047c4a0b&v=1836549DDD402A7611C42D5F4A43A689C33E8664" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('adzuna:5707204500', 'adzuna_5707204500')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('adzuna_5707204500')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56448344">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56448344" target="_blank">Software Engineer</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Vermillion Analytics</span>
-          <span class="sep">·</span>
-          <span class="salary">£45k – £65k</span>
-          <span class="sep">·</span>
-          <span class="location">London</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 2 Sept 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56448344" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56739957">
+    <div class="job-card" id="card_reed_56739957" data-id="reed:56739957">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -574,40 +454,13 @@
       
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56739957" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56739957', 'reed_56739957')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56739957')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56760122">
-      <div class="job-header">
-        <div class="job-title-row">
-          <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56760122" target="_blank">BI Analyst</a></h2>
-        </div>
-        <div class="job-meta">
-          <span class="company">Harnham - Data & Analytics Recruitment</span>
-          <span class="sep">·</span>
-          <span class="salary">£50k – £55k</span>
-          <span class="sep">·</span>
-          <span class="location">London</span>
-          <span class="sep">·</span>
-          <span class="source">reed</span>
-          <span class="sep">·</span>
-          <span class="posted">Posted 4 Aug 2026</span>
-        </div>
-      </div>
-      
-      <div class="no-docs">Documents not yet generated</div>
-      
-      <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56760122" target="_blank" class="btn-apply">Apply Now →</a>
-        
-      </div>
-    </div>
-  
-
-    <div class="job-card" id="reed:56739796">
+    <div class="job-card" id="card_reed_56739796" data-id="reed:56739796">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -630,23 +483,24 @@
       
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56739796" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56739796', 'reed_56739796')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56739796')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56733413">
+    <div class="job-card" id="card_reed_56733243" data-id="reed:56733243">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
-          <h2><a href="https://www.reed.co.uk/jobs/56733413" target="_blank">Financial Analyst</a></h2>
+          <h2><a href="https://www.reed.co.uk/jobs/56733243" target="_blank">Proclaim Developer</a></h2>
         </div>
         <div class="job-meta">
-          <span class="company">Robert Half</span>
+          <span class="company">Express Solicitors</span>
           <span class="sep">·</span>
-          <span class="salary">£45k – £55k</span>
+          <span class="salary">£40k – £50k</span>
           <span class="sep">·</span>
-          <span class="location">London</span>
+          <span class="location">M224SN</span>
           <span class="sep">·</span>
           <span class="source">reed</span>
           <span class="sep">·</span>
@@ -657,13 +511,43 @@
       <div class="no-docs">Documents not yet generated</div>
       
       <div class="job-actions">
-        <a href="https://www.reed.co.uk/jobs/56733413" target="_blank" class="btn-apply">Apply Now →</a>
-        
+        <a href="https://www.reed.co.uk/jobs/56733243" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56733243', 'reed_56733243')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56733243')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56768361">
+    <div class="job-card" id="card_reed_56448344" data-id="reed:56448344">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56448344" target="_blank">Software Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Vermillion Analytics</span>
+          <span class="sep">·</span>
+          <span class="salary">£45k – £65k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 2 Sept 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56448344" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56448344', 'reed_56448344')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56448344')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56768361" data-id="reed:56768361">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -686,12 +570,13 @@
       
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56768361" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56768361', 'reed_56768361')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56768361')">✕ Not Interested</button>
       </div>
     </div>
   
 
-    <div class="job-card" id="reed:56762811">
+    <div class="job-card" id="card_reed_56762811" data-id="reed:56762811">
       <div class="job-header">
         <div class="job-title-row">
           <span class="badge grey">Unscored</span>
@@ -714,30 +599,284 @@
       
       <div class="job-actions">
         <a href="https://www.reed.co.uk/jobs/56762811" target="_blank" class="btn-apply">Apply Now →</a>
-        
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56762811', 'reed_56762811')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56762811')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56760122" data-id="reed:56760122">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56760122" target="_blank">BI Analyst</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£50k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56760122" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56760122', 'reed_56760122')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56760122')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56733413" data-id="reed:56733413">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56733413" target="_blank">Financial Analyst</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Robert Half</span>
+          <span class="sep">·</span>
+          <span class="salary">£45k – £55k</span>
+          <span class="sep">·</span>
+          <span class="location">London</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Jan 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56733413" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56733413', 'reed_56733413')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56733413')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56589647" data-id="reed:56589647">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56589647" target="_blank">Business Development & Marketing Coordinator</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Larbey Evans</span>
+          <span class="sep">·</span>
+          <span class="salary">£40k – £50k</span>
+          <span class="sep">·</span>
+          <span class="location">EC2N4AG</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 3 Jun 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56589647" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56589647', 'reed_56589647')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56589647')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56753650" data-id="reed:56753650">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56753650" target="_blank">Web Developer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Oscar Technology</span>
+          <span class="sep">·</span>
+          <span class="salary">£30k – £40k</span>
+          <span class="sep">·</span>
+          <span class="location">Leeds</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Jul 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56753650" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56753650', 'reed_56753650')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56753650')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56756713" data-id="reed:56756713">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56756713" target="_blank">Data Engineer</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Erin Associates</span>
+          <span class="sep">·</span>
+          <span class="salary">£55k – £60k</span>
+          <span class="sep">·</span>
+          <span class="location">West Yorkshire</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56756713" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56756713', 'reed_56756713')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56756713')">✕ Not Interested</button>
+      </div>
+    </div>
+  
+
+    <div class="job-card" id="card_reed_56760229" data-id="reed:56760229">
+      <div class="job-header">
+        <div class="job-title-row">
+          <span class="badge grey">Unscored</span>
+          <h2><a href="https://www.reed.co.uk/jobs/56760229" target="_blank">Analytics Engineer (12 month FTC)</a></h2>
+        </div>
+        <div class="job-meta">
+          <span class="company">Harnham - Data & Analytics Recruitment</span>
+          <span class="sep">·</span>
+          <span class="salary">£57k – £67k</span>
+          <span class="sep">·</span>
+          <span class="location">Newcastle Upon Tyne</span>
+          <span class="sep">·</span>
+          <span class="source">reed</span>
+          <span class="sep">·</span>
+          <span class="posted">Posted 4 Aug 2026</span>
+        </div>
+      </div>
+      
+      <div class="no-docs">Documents not yet generated</div>
+      
+      <div class="job-actions">
+        <a href="https://www.reed.co.uk/jobs/56760229" target="_blank" class="btn-apply">Apply Now →</a>
+       <button class="btn-action btn-applied" onclick="markApplied('reed:56760229', 'reed_56760229')">✓ Applied for this</button>
+       <button class="btn-action btn-dismiss" onclick="dismiss('reed_56760229')">✕ Not Interested</button>
       </div>
     </div>
   
     <div class="no-results hidden" id="noResults">No jobs match your filters.</div>
   </main>
   <script>
+    const SUPABASE_URL = 'https://mrdozyxbonbukpmywxqi.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yZG96eXhib25idWtwbXl3eHFpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTIxMzgwNiwiZXhwIjoyMDkwNzg5ODA2fQ.RbS9M0NHEKZmDSGx_OEr9kE_kMAh5PpzJoEwFEimu-k';
+
+    // ── Dismissed state (localStorage) ──────────────────────────────────────
+    function getDismissed() {
+      return new Set(JSON.parse(localStorage.getItem('jh_dismissed') || '[]'));
+    }
+    function saveDismissed(set) {
+      localStorage.setItem('jh_dismissed', JSON.stringify([...set]));
+    }
+
+    function dismiss(safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      const jobId = card.dataset.id;
+      const dismissed = getDismissed();
+      dismissed.add(jobId);
+      saveDismissed(dismissed);
+      card.classList.add('card-dismissed');
+      filterJobs();
+    }
+
+    function undismiss(safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      const jobId = card.dataset.id;
+      const dismissed = getDismissed();
+      dismissed.delete(jobId);
+      saveDismissed(dismissed);
+      card.classList.remove('card-dismissed');
+      filterJobs();
+    }
+
+    // ── Applied state (Supabase) ─────────────────────────────────────────────
+    async function markApplied(jobId, safeId) {
+      const card = document.getElementById('card_' + safeId);
+      if (!card) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/jh_jobs?id=eq.' + encodeURIComponent(jobId), {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ applied: true, applied_at: new Date().toISOString() }),
+        });
+        if (res.ok || res.status === 204) {
+          card.classList.add('card-applied');
+          const actions = card.querySelector('.job-actions');
+          if (actions) actions.innerHTML = '<span class="applied-badge">✓ Applied</span>';
+        } else {
+          alert('Failed to mark applied — check your connection.');
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+
+    // ── Filter ───────────────────────────────────────────────────────────────
     function filterJobs() {
       const q = document.getElementById('search').value.toLowerCase();
       const minScore = parseInt(document.getElementById('minScore').value);
       const docsOnly = document.getElementById('docsOnly').checked;
+      const showDismissed = document.getElementById('showDismissed').checked;
+      const dismissed = getDismissed();
       let count = 0;
+
       document.querySelectorAll('.job-card').forEach(card => {
+        const jobId = card.dataset.id;
+        const isDismissed = dismissed.has(jobId);
         const text = card.textContent.toLowerCase();
         const badge = card.querySelector('.badge');
         const score = badge ? parseInt(badge.textContent) || 0 : 0;
         const hasDocs = card.querySelector('.btn-doc') !== null;
-        const show = (!q || text.includes(q)) && score >= minScore && (!docsOnly || hasDocs);
+        const passesFilters = (!q || text.includes(q)) && score >= minScore && (!docsOnly || hasDocs);
+        const show = passesFilters && (!isDismissed || showDismissed);
         card.classList.toggle('hidden', !show);
+        if (isDismissed) card.classList.add('card-dismissed');
         if (show) count++;
       });
+
       document.getElementById('countLabel').textContent = count + ' jobs';
       document.getElementById('noResults').classList.toggle('hidden', count > 0);
     }
+
+    // ── Init: apply dismissed state on load ──────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      const dismissed = getDismissed();
+      dismissed.forEach(jobId => {
+        const card = document.querySelector('[data-id="' + jobId + '"]');
+        if (card) card.classList.add('card-dismissed');
+      });
+      filterJobs();
+    });
   </script>
 </body>
 </html>
