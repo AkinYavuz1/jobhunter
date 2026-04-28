@@ -116,8 +116,10 @@ function buildHtml(cv: TailoredCV, name: string): string {
   `).join('');
 
   const portfolioProjects = (PORTFOLIO_PROJECTS ?? []).map((p) => `
-    <div class="s-proj-name">${esc(p.name)}</div>
-    <div class="s-proj-desc">${esc(p.description)}</div>
+    <div class="s-proj-item">
+      <div class="s-proj-name">${esc(p.name)}</div>
+      <div class="s-proj-desc">${esc(p.description)}</div>
+    </div>
   `).join('');
 
   const employmentHtml = cv.employment.map((role) => `
@@ -165,9 +167,11 @@ body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; background: white; }
 .s-header { font-size:11.5pt; font-weight:700; color:white; border-bottom:1.5px solid rgba(255,255,255,0.45); padding-bottom:3px; margin:11px 0 6px; }
 .s-cat { font-size:8.5pt; font-weight:700; color:white; margin:8px 0 3px; }
 .s-item { font-size:8.5pt; color:rgba(255,255,255,0.92); margin:1.5px 0; line-height:1.45; }
+.s-proj-item { break-inside: avoid; page-break-inside: avoid; }
 .s-proj-name { font-size:8.5pt; font-weight:700; color:white; margin:5px 0 1px; }
 .s-proj-url { font-size:8pt; color:rgba(255,255,255,0.8); margin-bottom:3px; }
 .s-proj-desc { font-size:7.5pt; color:rgba(255,255,255,0.8); line-height:1.4; margin-bottom:4px; }
+.s-portfolio-block { break-inside: avoid; page-break-inside: avoid; }
 
 .m-header { font-size:17pt; font-weight:700; color:#1B4332; border-bottom:2.5px solid #1B4332; padding-bottom:4px; margin:13px 0 8px; line-height:1; }
 .m-header:first-child { margin-top:0; }
@@ -204,9 +208,11 @@ body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; background: white; }
     <div class="s-header">Domain Knowledge</div>
     ${(DOMAIN_KNOWLEDGE ?? []).map((d) => `<div class="s-item">${esc(d)}</div>`).join('')}
 
-    <div class="s-header">Portfolio</div>
-    <div class="s-proj-url">${esc(PORTFOLIO_URL ?? '')}</div>
-    ${portfolioProjects}
+    <div class="s-portfolio-block">
+      <div class="s-header">Portfolio</div>
+      <div class="s-proj-url">${esc(PORTFOLIO_URL ?? '')}</div>
+      ${portfolioProjects}
+    </div>
 
     <div class="s-header">Methodologies</div>
     ${(METHODOLOGIES ?? []).map((m) => `<div class="s-item">${esc(m)}</div>`).join('')}
