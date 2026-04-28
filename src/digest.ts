@@ -1,26 +1,15 @@
 import { env } from './env.js';
 import type { ScoredJob } from './types.js';
-import { getSignedUrl } from './storage.js';
 
-interface JobWithDocs extends ScoredJob {
-  folderPath: string;
-  coverLetter: string;
-  pageCount: number;
-}
-
-export async function sendDigest(jobs: JobWithDocs[], runId: string): Promise<void> {
+export async function sendDigest(jobs: ScoredJob[], runId: string): Promise<void> {
   if (!jobs.length) return;
 
-  const sorted = [...jobs].sort((a, b) => b.obtainability - a.obtainability);
-  const rows = await Promise.all(sorted.map(buildJobRow));
-  const html = buildHtml(rows, runId, sorted.length);
+  const rows = jobs.map(buildJobRow);
+  const html = buildHtml(rows, runId, jobs.length);
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       from: env.RESEND_FROM,
       to: [env.DIGEST_EMAIL],
@@ -35,56 +24,35 @@ export async function sendDigest(jobs: JobWithDocs[], runId: string): Promise<vo
   }
 }
 
-async function buildJobRow(job: JobWithDocs): Promise<string> {
-  const badge = job.obtainability >= 75 ? '🟢' : job.obtainability >= 50 ? '🟡' : '⚪';
+function buildJobRow(job: ScoredJob): string {
   const salaryStr = job.salaryMin && job.salaryMax
-    ? `£${job.salaryMin.toLocaleString('en-GB')} – £${job.salaryMax.toLocaleString('en-GB')}`
-    : 'Salary not specified';
-
-  let downloadLinks = '';
-  try {
-    const [docxUrl, pdfUrl, txtUrl] = await Promise.all([
-      getSignedUrl(`${job.folderPath}akinyavuz_cv.docx`),
-      getSignedUrl(`${job.folderPath}akinyavuz_cv.pdf`),
-      getSignedUrl(`${job.folderPath}akinyavuz_cover_letter.txt`),
-    ]);
-    downloadLinks = `
-      <a href="${docxUrl}" style="margin-right:12px">📄 CV (.docx)</a>
-      <a href="${pdfUrl}" style="margin-right:12px">📋 CV (.pdf)</a>
-      <a href="${txtUrl}">✉️ Cover letter</a>
-    `;
-  } catch {
-    downloadLinks = '<em>Documents generating — check next digest</em>';
-  }
+    ? `£${Math.round(job.salaryMin / 1000)}k – £${Math.round(job.salaryMax / 1000)}k`
+    : job.salaryMax ? `Up to £${Math.round(job.salaryMax / 1000)}k`
+    : job.salaryMin ? `£${Math.round(job.salaryMin / 1000)}k+` : 'Salary TBC';
 
   return `
-    <div style="border:1px solid #ddd;border-radius:8px;padding:20px;margin-bottom:24px;font-family:Calibri,sans-serif">
-      <div style="margin-bottom:8px">
-        <span style="font-size:18px;font-weight:bold">${badge} ${job.obtainability}/100 — ${job.title}</span>
+    <div style="border:1px solid #e0e0e0;border-radius:8px;padding:16px 20px;margin-bottom:16px;font-family:Calibri,sans-serif">
+      <div style="font-size:15px;font-weight:bold;margin-bottom:4px">
+        <a href="${job.url}" style="color:#1B4332;text-decoration:none">${job.title}</a>
       </div>
-      <div style="color:#555;margin-bottom:4px">${job.company ?? 'Company not listed'} · ${salaryStr} · ${job.location ?? 'Remote UK'}</div>
-      <div style="color:#777;font-size:13px;margin-bottom:12px">Source: ${job.source} · Posted: ${job.postedAt ? job.postedAt.toLocaleDateString('en-GB') : 'recently'}</div>
-      <div style="background:#f9f9f9;border-left:3px solid #1B4332;padding:10px 14px;margin-bottom:12px;font-style:italic;color:#444">${job.obtainabilityReason}</div>
-      <div style="background:#f0f7f4;padding:12px 14px;margin-bottom:14px;border-radius:4px"><strong>Cover letter:</strong><br/><br/>${job.coverLetter}</div>
-      <div style="margin-bottom:12px">${downloadLinks}</div>
-      <a href="${job.url}" style="display:inline-block;background:#1B4332;color:white;padding:8px 18px;border-radius:4px;text-decoration:none;font-weight:bold;margin-right:10px">Apply Now</a>
-    </div>
-  `;
+      <div style="color:#555;font-size:13px;margin-bottom:8px">
+        ${job.company ?? 'Company TBC'} · <strong style="color:#1B4332">${salaryStr}</strong> · ${job.location ?? 'Remote UK'} · ${job.source}
+      </div>
+      <a href="${job.url}" style="display:inline-block;background:#1B4332;color:white;padding:6px 16px;border-radius:5px;text-decoration:none;font-size:13px;font-weight:600">Apply Now →</a>
+    </div>`;
 }
 
 function buildHtml(rows: string[], runId: string, total: number): string {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head><meta charset="utf-8"/></head>
-    <body style="font-family:Calibri,sans-serif;max-width:700px;margin:0 auto;padding:20px">
-      <h1 style="color:#1B4332;border-bottom:2px solid #1B4332;padding-bottom:8px">
-        💼 ${total} new remote job${total > 1 ? 's' : ''} — sorted by obtainability
-      </h1>
-      <p style="color:#666;font-size:13px">Run: ${runId} · CVs and cover letters tailored for each role · Download links expire in 7 days</p>
-      ${rows.join('\n')}
-      <p style="color:#aaa;font-size:11px;margin-top:30px">Powered by jobhunter — jobs auto-expire after 30 days unless marked applied</p>
-    </body>
-    </html>
-  `;
+  return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"/></head>
+<body style="font-family:Calibri,sans-serif;max-width:650px;margin:0 auto;padding:20px">
+  <h1 style="color:#1B4332;border-bottom:2px solid #1B4332;padding-bottom:8px;margin-bottom:4px">
+    💼 ${total} new remote job${total > 1 ? 's' : ''} found
+  </h1>
+  <p style="color:#666;font-size:13px;margin-bottom:20px">
+    Run ID: ${runId} · Open <strong>pnpm serve</strong> in the jobhunter directory to generate tailored CVs on demand.
+  </p>
+  ${rows.join('\n')}
+  <p style="color:#aaa;font-size:11px;margin-top:24px">Jobs auto-expire after 30 days unless marked applied.</p>
+</body></html>`;
 }

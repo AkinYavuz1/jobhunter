@@ -10,9 +10,7 @@ import { searchReed } from './sources/reed.js';
 import { deduplicate } from './dedup.js';
 import { passesHardFilters } from './normalise.js';
 import { fetchFullDescription, needsFullDescription } from './fetch-detail.js';
-import { generateForJob, mergeIntoScoredJob } from './generator.js';
-import { renderCV } from './renderer.js';
-import { saveJob, saveDocument, hasBeenNotified, markNotified, uploadFile, getJob } from './storage.js';
+import { saveJob, hasBeenNotified, markNotified } from './storage.js';
 import { sendBatchSummary } from './notifier.js';
 import { sendDigest } from './digest.js';
 import { runCleanup } from './cleanup.js';
@@ -108,84 +106,42 @@ async function main() {
     process.exit(0);
   }
 
-  // 6. Process each new job
-  const processedJobs: Array<ScoredJob & { folderPath: string; coverLetter: string; pageCount: number }> = [];
-
+  // 6. Save new jobs to DB and mark notified (no CV generation — done on demand via pnpm serve)
+  let savedCount = 0;
   for (const job of toProcess) {
     try {
-      // 6a. Fetch full description if needed
       if (needsFullDescription(job.description)) {
         const fullDesc = await fetchFullDescription(job.url, job.description);
-        if (fullDesc) {
-          job.description = fullDesc;
-          job.descriptionFull = true;
-        }
+        if (fullDesc) { job.description = fullDesc; job.descriptionFull = true; }
       }
-
-      // 6b. Save raw job to DB first — decoupled from Gemini so jobs persist even if generation fails
       await saveJob({ ...job, obtainability: 0, obtainabilityReason: '' });
-
-      // 6c. Gemini: CV tailoring + cover letter + obtainability
-      const output = await generateForJob(job, cvBaseYaml, globalConfig);
-      const scoredJob = mergeIntoScoredJob(job, output);
-
-      // Update with obtainability score
-      await saveJob(scoredJob);
-
-      // 6e. Render DOCX + PDF — merge top-level keyProjects into cv before passing to renderer
-      const cvForRender = { ...output.cv, keyProjects: output.keyProjects ?? [] };
-      const { docxBuffer, pdfBuffer, pageCount } = await renderCV(cvForRender, 'Akin Yavuz');
-      logger.info('CV rendered', { id: job.id, pages: pageCount });
-
-      // 6f. Upload to Storage
-      const folderPath = `jobs/${job.id}/`;
-      await uploadFile(`${folderPath}akinyavuz_cv.docx`, docxBuffer, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-      if (pdfBuffer) {
-        await uploadFile(`${folderPath}akinyavuz_cv.pdf`, pdfBuffer, 'application/pdf');
-      }
-      await uploadFile(`${folderPath}akinyavuz_cover_letter.txt`, output.coverLetter, 'text/plain');
-
-      // 6g. Save document record
-      await saveDocument(job.id, {
-        coverLetter: output.coverLetter,
-        cvTailored: output.cv,
-        folderPath,
-        pageCount,
-      });
-
-      // 6h. Mark notified
       await markNotified(job.id);
-
-      processedJobs.push({ ...scoredJob, folderPath, coverLetter: output.coverLetter, pageCount });
-      logger.info('Job processed', { id: job.id, title: job.title, obtainability: output.obtainability });
+      savedCount++;
+      logger.info('Job saved', { id: job.id, title: job.title });
     } catch (err) {
-      const msg = `Failed to process job ${job.id} (${job.title}): ${(err as Error).message}`;
+      const msg = `Failed to save job ${job.id} (${job.title}): ${(err as Error).message}`;
       logger.error(msg);
       errors.push(msg);
     }
   }
 
-  // 7. Batched ntfy summary
-  if (processedJobs.length > 0) {
+  // 7. ntfy summary
+  if (savedCount > 0) {
     try {
-      await sendBatchSummary(processedJobs, processedJobs.length);
-      logger.info('ntfy summary sent', { count: processedJobs.length });
+      await sendBatchSummary(toProcess as ScoredJob[], savedCount);
+      logger.info('ntfy summary sent', { count: savedCount });
     } catch (err) {
-      const msg = `ntfy failed: ${(err as Error).message}`;
-      logger.warn(msg);
-      errors.push(msg);
+      errors.push(`ntfy failed: ${(err as Error).message}`);
     }
   }
 
   // 8. Digest email
-  if (processedJobs.length > 0) {
+  if (savedCount > 0) {
     try {
-      await sendDigest(processedJobs, runId);
-      logger.info('Digest sent', { count: processedJobs.length, to: process.env.DIGEST_EMAIL });
+      await sendDigest(toProcess as ScoredJob[], runId);
+      logger.info('Digest sent', { count: savedCount });
     } catch (err) {
-      const msg = `Digest failed: ${(err as Error).message}`;
-      logger.warn(msg);
-      errors.push(msg);
+      errors.push(`Digest failed: ${(err as Error).message}`);
     }
   } else {
     logger.info('No new jobs — digest skipped');
@@ -206,9 +162,9 @@ async function main() {
     finishedAt: new Date().toISOString(),
     jobsCollected: allJobs.length,
     jobsAfterFilter: filtered.length,
-    jobsNew: toProcess.length,
-    docsGenerated: processedJobs.length,
-    notificationsSent: processedJobs.length > 0 ? 1 : 0,
+    jobsNew: savedCount,
+    docsGenerated: 0,
+    notificationsSent: savedCount > 0 ? 1 : 0,
     errors,
   };
 

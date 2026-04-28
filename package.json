@@ -7,11 +7,15 @@
     "hunt": "tsx src/main.ts",
     "hunt:dry": "tsx src/main.ts --dry-run",
     "typecheck": "tsc --noEmit",
-    "dashboard": "tsx src/dashboard.ts"
+    "dashboard": "tsx src/dashboard.ts",
+    "serve": "tsx src/server.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
+    "@types/express": "^5.0.6",
     "docx": "^9.5.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "groq-sdk": "^1.1.2",
     "js-yaml": "^4.1.0",
     "pdf-lib": "^1.17.1",
